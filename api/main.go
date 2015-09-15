@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/triitvn/instagram-go/user"
+	"github.com/triitvn/instagram-go/api/user"
 	"log"
 	"net/http"
 )

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	// "fmt"
 	"github.com/gorilla/mux"
-	"github.com/triitvn/instagram-go/db"
+	"github.com/triitvn/instagram-go/api/db"
 	"net/http"
 	"strconv"
 	"time"
@@ -15,7 +15,7 @@ type User struct {
 	Id          int
 	Name        string
 	Email       string
-	Password    string
+	Password    string `json:"-"`
 	Session     string
 	ExpiredTime time.Time
 }
@@ -48,10 +48,16 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		Password: r.FormValue("password"),
 	}
 
+	user.createSession()
+
 	db.Conn.Create(&user)
 	json.NewEncoder(w).Encode(user)
 }
 
+// Input: email string, password string
+// Output:
+// - Success: session string
+// - Failed: {}
 func Login(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := r.FormValue("password")
@@ -59,11 +65,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	user := User{}
 	db.Conn.Where("email = ? and password = ?", email, password).First(&user)
 
-	if user.Id != 0 {
-		user.Session = strconv.Itoa(int(time.Now().Unix()))
-		user.ExpiredTime = time.Now()
-		db.Conn.Save(&user)
+	if user.Id == 0 {
+		w.WriteHeader(http.StatusForbidden)
+		w.Write([]byte(`{"error":"Mat khau hoac email khong dung"}`))
+		return
 	}
+
+	user.createSession()
+	db.Conn.Save(&user)
 
 	json.NewEncoder(w).Encode(user)
 }
@@ -73,4 +82,11 @@ func ValidateLogin(w http.ResponseWriter, r *http.Request) {
 	user := User{}
 	db.Conn.Where("session = ?", session).First(&user)
 	json.NewEncoder(w).Encode(user)
+}
+
+//---
+
+func (u *User) createSession() {
+	u.Session = strconv.Itoa(int(time.Now().Unix()))
+	u.ExpiredTime = time.Now()
 }
