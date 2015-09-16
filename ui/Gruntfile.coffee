@@ -3,6 +3,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
+  grunt.loadNpmTasks 'grunt-browserify'
 
   grunt.initConfig
     compass:
@@ -13,23 +14,22 @@ module.exports = (grunt) ->
         options:
           clean: true
     
-    coffee:
-      default:
+    browserify:
+      app:
         options:
-          bare: false
-          join: true
-          sourceMap: true
-          sourceMapDir: 'dist/js/'
+          debug: true
+          transform: ['babelify']
+          extension: ['.jsx']
         files:
-          'dist/js/scripts.js': 'src/coffee/**/*.coffee'
-    
+          'dist/js/app.js': ['src/app/index.jsx']
+
     watch:
       scss:
         files: ['src/scss/**/*.scss']
         tasks: ['compass:dist']
-      coffee:
-        files: ['src/coffee/**/*.coffee']
-        tasks: ['coffee']
+      app:
+        files: ['src/app/**/*.jsx']
+        tasks: ['browserify:app']
 
     uglify:
       vendor:
@@ -38,7 +38,7 @@ module.exports = (grunt) ->
           mangle: false
         files:
           'dist/js/vendor.js': [
-            'bower_components/angular/angular.min.js'
+            # 'bower_components/angular/angular.min.js'
             'bower_components/jquery/dist/jquery.min.js'
           ]
 
@@ -51,9 +51,9 @@ module.exports = (grunt) ->
   )
 
   grunt.registerTask(
-    'js',
+    'app',
     [
-      'watch:coffee'
+      'watch:app'
     ]
   )
 
