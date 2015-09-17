@@ -4,16 +4,17 @@ import jQuery from 'jquery'
 class Auth {
   constructor() {
     this.tokenString = '_sssToken'
-    console.log('This is auth');
+    this.login()
   }
 
   login(data, cb) {
     cb = arguments[arguments.length - 1]
 
-    // Logged in
-    if (this.isLoggedIn()) {
-      if (cb) cb(true)
+    let _isLoggedIn = this.isLoggedIn()
 
+    // Logged in
+    if (_isLoggedIn || !data) {
+      if (cb) cb(_isLoggedIn)
       return
     }
 
@@ -22,19 +23,20 @@ class Auth {
       url: `${Config.apiUrl}/user/login`,
       data: data,
       success: (data) => {
-        console.log('success');
+        location.reload()
         this.setToken(data.token)
         if (cb) cb(data)
       },
       error: (data)=> {
         console.log('error')
-        if (cb) cb(data)
+        // if (cb) cb(data)
       }
     })
   }
 
   logout() {
-    return this.deleteToken()
+    this.deleteToken()
+    return location.reload()
   }
 
   getToken() {

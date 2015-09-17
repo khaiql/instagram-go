@@ -7,6 +7,10 @@ class Login extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      isLoggedIn: Auth.isLoggedIn()
+    }
+
     // ES6 not auto bind this
     this.login = this.login.bind(this)
   }

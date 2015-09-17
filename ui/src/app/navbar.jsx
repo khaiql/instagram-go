@@ -2,6 +2,23 @@ import React from 'react'
 import Auth from './auth.jsx'
 
 class Navbar extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isLoggedIn: Auth.isLoggedIn()
+    }
+  }
+
+  setIsLoggedIn(isLoggedIn) {
+    this.setState({
+      isLoggedIn: isLoggedIn
+    })
+  }
+
+  handleLogout() {
+    Auth.logout()
+  }
+
   render() {
     return(
       <div className="container">
@@ -24,9 +41,14 @@ class Navbar extends React.Component {
         </ul>
 
         <div className="pull-right">
-          <div className="pull-right">
-            Hello Tri | Logout
-          </div>
+        { 
+          this.state.isLoggedIn ? (
+            <div className="pull-right">
+              Hello Tri | <span onClick={ this.handleLogout }>Logout</span>
+            </div>
+          ) : '' 
+        }
+          
           <form 
             style={{ margin: 0 + 'px' }} 
             className="form-inline navbar-form" 
