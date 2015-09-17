@@ -16,7 +16,7 @@ type User struct {
 	Name        string
 	Email       string
 	Password    string `json:"-"`
-	Session     string
+	Token       string
 	ExpiredTime time.Time
 }
 
@@ -78,15 +78,15 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func ValidateLogin(w http.ResponseWriter, r *http.Request) {
-	session := r.FormValue("session")
+	token := r.FormValue("token")
 	user := User{}
-	db.Conn.Where("session = ?", session).First(&user)
+	db.Conn.Where("token = ?", token).First(&user)
 	json.NewEncoder(w).Encode(user)
 }
 
 //---
 
 func (u *User) createSession() {
-	u.Session = strconv.Itoa(int(time.Now().Unix()))
+	u.Token = strconv.Itoa(int(time.Now().Unix()))
 	u.ExpiredTime = time.Now()
 }

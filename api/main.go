@@ -21,5 +21,15 @@ func main() {
 	router.HandleFunc("/user/{userId}", user.GetUser)
 
 	// Bind to a port and pass our router in
-	log.Fatal(http.ListenAndServe(":3001", router))
+	http.Handle("/", &MyServer{router})
+	log.Fatal(http.ListenAndServe(":3001", nil))
+}
+
+type MyServer struct {
+	r *mux.Router
+}
+
+func (m *MyServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	m.r.ServeHTTP(w, r)
 }
