@@ -20,7 +20,7 @@ module.exports = (grunt) ->
           transform: ['babelify']
           extension: ['.jsx']
         files:
-          'dist/js/app.js': ['src/app/index.jsx']
+          'dist/js/app.js': ['src/app/app.jsx']
 
     watch:
       scss:

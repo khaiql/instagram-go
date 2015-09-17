@@ -1,4 +1,5 @@
 import React from 'react'
+import Auth from './auth.jsx'
 
 class Navbar extends React.Component {
   render() {
@@ -22,10 +23,20 @@ class Navbar extends React.Component {
           </li>
         </ul>
 
-        <form style={{ margin: 0 + 'px' }} className="form-inline navbar-form pull-right" _lpchecked="1">
-          <input className="form-control" type="text" placeholder="Search" />
-          <button className="btn btn-secondary-outline" type="submit">Search</button>
-        </form>
+        <div className="pull-right">
+          <div className="pull-right">
+            Hello Tri | Logout
+          </div>
+          <form 
+            style={{ margin: 0 + 'px' }} 
+            className="form-inline navbar-form" 
+            _lpchecked="1"
+          >
+            <input className="form-control" type="text" placeholder="Search" />
+            <button className="btn btn-secondary-outline" type="submit">Search</button>
+          </form>
+        </div>
+
       </nav>
       </div>
     )

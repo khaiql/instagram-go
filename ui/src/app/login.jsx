@@ -1,13 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router'
-import jQuery from 'jquery'
-import Config from './config.jsx'
-import cookie from 'react-cookie'
+import Auth from './auth.jsx'
 
 class Login extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
 
     // ES6 not auto bind this
     this.login = this.login.bind(this)
@@ -67,28 +65,9 @@ class Login extends React.Component {
     }
 
     // TODO validate input
-
-    jQuery.ajax({
-      url: `${Config.apiUrl}/user/login`,
-      data: _data,
-      success: (data) => {
-        console.log(data);
-      },
-      error: (data)=> {
-        console.log(data);
-      }
-    })
+    
+    Auth.login(_data)
   }
-
-  // componentDidMount() {
-  //   jQuery.ajax({
-  //     url: "https://api.github.com/users/octocat/gists",
-  //     success: (data) => {
-  //       console.log(data)
-  //       console.log(React.findDOMNode(this));
-  //     }
-  //   })
-  // }
 }
 
 export default Login
