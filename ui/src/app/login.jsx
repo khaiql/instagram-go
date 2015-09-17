@@ -8,14 +8,8 @@ class Login extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      email: null,
-      password: null,
-      remember: true
-    }
 
     // ES6 not auto bind this
-    this.handleChange = this.handleChange.bind(this)
     this.login = this.login.bind(this)
   }
 
@@ -26,32 +20,29 @@ class Login extends React.Component {
           <h2 className="form-signin-heading">Please sign in</h2>
           <label htmlFor="inputEmail" className="sr-only">Email address</label>
           <input 
+            ref="email"
             type="email" 
             id="inputEmail" 
             className="form-control" 
             placeholder="Email address" 
             required 
-            autofocus 
-            name="email"
-            onChange={ this.handleChange } 
+            autofocus
           />
           <label htmlFor="inputPassword" className="sr-only">Password</label>
           <input 
+            ref="password"
             type="password" 
             id="inputPassword" 
             className="form-control" 
             placeholder="Password" 
-            required 
-            name="password"
-            onChange={ this.handleChange }
+            required
           />
           <div className="checkbox">
             <label>
               <input 
+                ref="remember"
                 type="checkbox" 
-                defaultChecked={ this.state.remember }
-                name="remember"
-                onChange={ this.handleChange }
+                defaultChecked="checked"
               /> Remember me
             </label>
           </div>
@@ -66,22 +57,20 @@ class Login extends React.Component {
     )
   }
 
-  handleChange(e) {
-    let nextState = {}
-    if (e.target.type === 'checkbox') {
-      nextState[e.target.name] = e.target.checked
-    } else {
-      nextState[e.target.name] = e.target.value
-    }
-    this.setState(nextState)
-  }
-
   login(e) {
     e.preventDefault()
+    
+    let _data = {
+      email: React.findDOMNode(this.refs.email).value,
+      password: React.findDOMNode(this.refs.password).value,
+      remember: React.findDOMNode(this.refs.remember).checked
+    }
+
+    // TODO validate input
 
     jQuery.ajax({
       url: `${Config.apiUrl}/user/login`,
-      data: this.state,
+      data: _data,
       success: (data) => {
         console.log(data);
       },
