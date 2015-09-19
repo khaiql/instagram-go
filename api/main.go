@@ -22,7 +22,7 @@ func main() {
 
 	router.HandleFunc("/user/{userId}", user.Update).Methods("POST")
 
-	// router.HandleFunc("/user/{userId}/photos", user.GetPhotos).Methods("GET")
+	router.HandleFunc("/user/{userId}/photos", user.GetPhotos).Methods("GET")
 
 	// Bind to a port and pass our router in
 	http.Handle("/", &MyServer{router})

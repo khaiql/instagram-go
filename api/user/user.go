@@ -21,19 +21,12 @@ type User struct {
 	Photos      []Photo
 }
 
-type Photo struct {
-	Id        int    `sql:"AUTO_INCREMENT"`
-	Url       string `sql:"type:varchar(200)"`
-	CreatedAt time.Time
-	UserId    int `sql:"index"` // Foreign key (belongs to), tag `index` will create index for this field when using AutoMigrate
-}
-
 func Update(w http.ResponseWriter, r *http.Request) {
 	var user User
 	vars := mux.Vars(r)
-	userId := vars["userId"]
+	userId, _ := strconv.Atoi(vars["userId"])
 
-	db.Conn.Where("id = ?", userId).First(&user)
+	db.Conn.Where(&User{Id: userId}).First(&user)
 
 	oldPassword := r.FormValue("oldPassword")
 	newPassword := r.FormValue("newPassword")
@@ -87,11 +80,11 @@ func GetAll(w http.ResponseWriter, r *http.Request) {
 
 func Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	userId := vars["userId"]
+	userId, _ := strconv.Atoi(vars["userId"])
 
 	// TODO validate userId is number
 	var user User
-	db.Conn.Where("id = ?", userId).First(&user)
+	db.Conn.Where(&User{Id: userId}).First(&user)
 
 	// w.Header().Set("Server", "A Go Web Server")
 	// w.WriteHeader(200)
@@ -126,7 +119,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 
 	user := User{}
-	db.Conn.Where("email = ? and password = ?", email, password).First(&user)
+	db.Conn.Where(&User{Email: email, Password: password}).First(&user)
 
 	if user.Id == 0 {
 		w.WriteHeader(http.StatusForbidden)
@@ -143,7 +136,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 func ValidateLogin(w http.ResponseWriter, r *http.Request) {
 	token := r.FormValue("token")
 	user := User{}
-	db.Conn.Where("token = ?", token).First(&user)
+	db.Conn.Where(&User{Token: token}).First(&user)
 	json.NewEncoder(w).Encode(user)
 }
 
