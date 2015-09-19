@@ -18,7 +18,11 @@ func main() {
 	router.HandleFunc("/user/login", user.Login)
 	router.HandleFunc("/user/login/validate", user.ValidateLogin)
 
-	router.HandleFunc("/user/{userId}", user.GetUser)
+	router.HandleFunc("/user/{userId}", user.Get).Methods("GET")
+
+	router.HandleFunc("/user/{userId}", user.Update).Methods("POST")
+
+	// router.HandleFunc("/user/{userId}/photos", user.GetPhotos).Methods("GET")
 
 	// Bind to a port and pass our router in
 	http.Handle("/", &MyServer{router})
@@ -31,5 +35,6 @@ type MyServer struct {
 
 func (m *MyServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
 	m.r.ServeHTTP(w, r)
 }

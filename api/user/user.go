@@ -12,12 +12,70 @@ import (
 )
 
 type User struct {
-	Id          int
-	Name        string
-	Email       string
-	Password    string `json:"-"`
-	Token       string
+	Id          int    `sql:"AUTO_INCREMENT"`
+	DisplayName string `sql:"type:varchar(100)"`
+	Email       string `sql:"type:varchar(100);unique_index"`
+	Password    string `sql:"type:varchar(100)" json:"-"`
+	Token       string `sql:"type:varchar(100)"`
 	ExpiredTime time.Time
+	Photos      []Photo
+}
+
+type Photo struct {
+	Id        int    `sql:"AUTO_INCREMENT"`
+	Url       string `sql:"type:varchar(200)"`
+	CreatedAt time.Time
+	UserId    int `sql:"index"` // Foreign key (belongs to), tag `index` will create index for this field when using AutoMigrate
+}
+
+func Update(w http.ResponseWriter, r *http.Request) {
+	var user User
+	vars := mux.Vars(r)
+	userId := vars["userId"]
+
+	db.Conn.Where("id = ?", userId).First(&user)
+
+	oldPassword := r.FormValue("oldPassword")
+	newPassword := r.FormValue("newPassword")
+
+	if oldPassword != "" && newPassword != "" {
+		result := updatePassword(&user, oldPassword, newPassword)
+
+		if result {
+			w.Write([]byte(`{"result":true}`))
+		} else {
+			w.Write([]byte(`{"result":false}`))
+		}
+
+		return
+	}
+
+	updateValues := User{}
+
+	// User is exist
+	displayName := r.FormValue("displayName")
+	email := r.FormValue("email")
+
+	if displayName != "" {
+		updateValues.DisplayName = displayName
+	}
+
+	if email != "" {
+		updateValues.Email = email
+	}
+
+	db.Conn.Model(&user).UpdateColumns(updateValues)
+
+	json.NewEncoder(w).Encode(user)
+}
+
+func updatePassword(user *User, oldPassword string, newPassword string) bool {
+	if user.Password != oldPassword {
+		return false
+	}
+
+	db.Conn.Model(&user).UpdateColumn("Password", newPassword)
+	return true
 }
 
 func GetAll(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +85,7 @@ func GetAll(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(users)
 }
 
-func GetUser(w http.ResponseWriter, r *http.Request) {
+func Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userId := vars["userId"]
 
@@ -43,14 +101,19 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 func Register(w http.ResponseWriter, r *http.Request) {
 
 	user := User{
-		Name:     r.FormValue("name"),
-		Email:    r.FormValue("email"),
-		Password: r.FormValue("password"),
+		DisplayName: r.FormValue("name"),
+		Email:       r.FormValue("email"),
+		Password:    r.FormValue("password"),
 	}
 
 	user.createSession()
 
-	db.Conn.Create(&user)
+	if err := db.Conn.Create(&user).Error; err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
 	json.NewEncoder(w).Encode(user)
 }
 
