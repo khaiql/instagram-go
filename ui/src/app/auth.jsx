@@ -22,14 +22,13 @@ class Auth {
     jQuery.ajax({
       url: `${Config.apiUrl}/user/login`,
       data: data,
-      success: (data) => {
+      success: (resp) => {
         location.reload()
-        this.setToken(data.token)
-        if (cb) cb(data)
+        this.setToken(resp.token)
+        if (cb) cb(resp)
       },
-      error: (data)=> {
-        console.log('error')
-        // if (cb) cb(data)
+      error: (resp)=> {
+        alert('Login failed')
       }
     })
   }

@@ -55,7 +55,7 @@ class Login extends React.Component {
         <hr />
 
         <Link to="/register" className="btn btn-lg btn-link btn-block" type="button">Register</Link>
-      </div>
+      </div> // .container
     )
   }
 

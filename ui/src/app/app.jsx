@@ -4,6 +4,7 @@ import Navbar from './navbar.jsx'
 import Register from './register.jsx'
 import Index from './index.jsx'
 import Login from './login.jsx'
+import Account from './account.jsx'
 
 var { Route, RouteHandler, DefaultRoute, Link } = Router;
  
@@ -32,6 +33,7 @@ var routes = (
     <DefaultRoute handler={Index} />
     <Route path="/login" handler={Login} />
     <Route path="/register" handler={Register} />
+    <Route path="/account" handler={Account} />
   </Route>
 );
 
