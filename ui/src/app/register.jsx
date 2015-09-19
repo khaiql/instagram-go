@@ -16,34 +16,27 @@ var Register = React.createClass({
     return (
       <div className="container">
         <form className="form-register">
-          <h2>Register</h2>
-          <label htmlFor="inputName" className="sr-only">Display Name</label>
           <input 
             ref="displayName"
             type="text" 
-            id="inputName" 
-            className="form-control"
+            className="form-control input-lg display-name"
             placeholder="Display Name"
             required
             autofocus
           />
 
-          <label htmlFor="inputEmail" className="sr-only">Email</label>
           <input 
             ref="email"
-            type="email" 
-            id="inputEmail" 
-            className="form-control"
+            type="email"  
+            className="form-control input-lg email"
             placeholder="Email"
             required
           />
 
-          <label htmlFor="inputPassword" className="sr-only">Password</label>
           <input 
             ref="password"
             type="password" 
-            id="inputPassword" 
-            className="form-control"
+            className="form-control input-lg password"
             placeholder="Password"
             required
           /> 
@@ -68,15 +61,16 @@ var Register = React.createClass({
     }
 
     jQuery.ajax({
-      url: `${Config.apiUrl}/user/register`,
+      url: `${Config.apiUrl}/user`,
+      method: 'POST',
       data: _data,
       success: (resp) => {
         Auth.setToken(resp.token)
         this.transitionTo('/')
         return location.reload()
       },
-      error: (resp) => {
-        alert('Register failed')
+      error: (jqXHR, textStatus, errorThrown) => {
+        alert(jqXHR.responseJSON.Message)
       }
     })
   }

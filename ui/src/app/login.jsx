@@ -18,24 +18,19 @@ class Login extends React.Component {
   render() {
     return(
       <div className="container">
-        <form className="form-signin">
-          <h2 className="form-signin-heading">Please sign in</h2>
-          <label htmlFor="inputEmail" className="sr-only">Email address</label>
+        <form className="form-login">
           <input 
             ref="email"
             type="email" 
-            id="inputEmail" 
-            className="form-control" 
+            className="form-control input-lg email" 
             placeholder="Email address" 
             required 
             autofocus
           />
-          <label htmlFor="inputPassword" className="sr-only">Password</label>
           <input 
             ref="password"
             type="password" 
-            id="inputPassword" 
-            className="form-control" 
+            className="form-control input-lg password" 
             placeholder="Password" 
             required
           />
@@ -52,9 +47,7 @@ class Login extends React.Component {
           <button onClick={ this.login } className="btn btn-lg btn-primary btn-block" type="submit">Login</button>
         </form>
 
-        <hr />
-
-        <Link to="/register" className="btn btn-lg btn-link btn-block" type="button">Register</Link>
+        <Link to="/register" className="btn btn-link btn-block" type="button">Register now!</Link>
       </div> // .container
     )
   }

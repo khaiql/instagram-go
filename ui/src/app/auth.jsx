@@ -3,7 +3,8 @@ import jQuery from 'jquery'
 
 class Auth {
   constructor() {
-    this.tokenString = '_sssToken'
+    this.tokenStr = Config.ls.acc.token
+    this.displayNameStr = Config.ls.acc.displayName
     this.login()
   }
 
@@ -23,9 +24,10 @@ class Auth {
       url: `${Config.apiUrl}/user/login`,
       data: data,
       success: (resp) => {
+        this.setToken(resp.Token)
+        this.setDisplayName(resp.DisplayName)
+        // if (cb) cb(resp)
         location.reload()
-        this.setToken(resp.token)
-        if (cb) cb(resp)
       },
       error: (resp)=> {
         alert('Login failed')
@@ -35,19 +37,32 @@ class Auth {
 
   logout() {
     this.deleteToken()
+    this.deleteDisplayName()
     return location.reload()
   }
 
   getToken() {
-    return localStorage.getItem(this.tokenString)
+    return localStorage.getItem(this.tokenStr)
   }
 
   setToken(value) {
-    return localStorage.setItem(this.tokenString, value)
+    return localStorage.setItem(this.tokenStr, value)
   }
 
   deleteToken() {
-    return localStorage.removeItem(this.tokenString)
+    return localStorage.removeItem(this.tokenStr)
+  }
+
+  getDisplayName() {
+    return localStorage.getItem(this.displayNameStr)
+  }
+
+  setDisplayName(value) {
+    return localStorage.setItem(this.displayNameStr, value)
+  }
+
+  deleteDisplayName() {
+    return localStorage.removeItem(this.displayNameStr)
   }
 
   isLoggedIn() {

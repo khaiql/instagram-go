@@ -20,9 +20,7 @@ class App extends React.Component {
           <RouteHandler />
         </main>
 
-        <footer>
-          Footer
-        </footer>
+        <footer></footer>
       </div>
     );
   }

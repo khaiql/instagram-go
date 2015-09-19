@@ -1,11 +1,13 @@
 import React from 'react'
 import Auth from './auth.jsx'
+import { Link } from 'react-router'
 
 class Navbar extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoggedIn: Auth.isLoggedIn()
+      isLoggedIn: Auth.isLoggedIn(),
+      displayName: Auth.getDisplayName()
     }
   }
 
@@ -29,19 +31,23 @@ class Navbar extends React.Component {
         { 
           this.state.isLoggedIn ? (
             <div className="pull-right">
-              Hello Tri | <span onClick={ this.handleLogout }>Logout</span>
+              Hello <Link to="/account">{ this.state.displayName }</Link> | <span onClick={ this.handleLogout }>Logout</span>
             </div>
           ) : '' 
         }
-          
-          <form 
-            style={{ margin: 0 + 'px' }} 
-            className="form-inline navbar-form" 
-            _lpchecked="1"
-          >
-            <input className="form-control" type="text" placeholder="Search" />
-            <button className="btn btn-secondary-outline" type="submit">Search</button>
-          </form>
+        
+        {
+          this.state.isLoggedIn ? (
+            <form 
+              style={{ margin: 0 + 'px' }} 
+              className="form-inline navbar-form" 
+              _lpchecked="1"
+            >
+              <input className="form-control" type="text" placeholder="Search" />
+              <button className="btn btn-secondary-outline" type="submit">Search</button>
+            </form>
+          ) : ''
+        }
         </div>
 
       </nav>
