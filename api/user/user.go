@@ -4,6 +4,7 @@ import (
 	// "crypto/md5"
 	"encoding/json"
 	// "fmt"
+	"database/sql"
 	"github.com/gorilla/mux"
 	"github.com/triitvn/instagram-go/api/db"
 	"net/http"
@@ -12,11 +13,11 @@ import (
 )
 
 type User struct {
-	Id          int    `sql:"AUTO_INCREMENT"`
-	DisplayName string `sql:"type:varchar(100)"`
-	Email       string `sql:"type:varchar(100);unique_index"`
-	Password    string `sql:"type:varchar(100)" json:"-"`
-	Token       string `sql:"type:varchar(100)"`
+	Id          int            `sql:"AUTO_INCREMENT"`
+	DisplayName string         `sql:"type:varchar(100)"`
+	Email       sql.NullString `sql:"type:varchar(100);unique_index"`
+	Password    string         `sql:"type:varchar(100)" json:"-"`
+	Token       string         `sql:"type:varchar(100)"`
 	ExpiredTime time.Time
 	Photos      []Photo
 }
@@ -53,9 +54,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		updateValues.DisplayName = displayName
 	}
 
-	if email != "" {
-		updateValues.Email = email
-	}
+	updateValues.Email.Scan(email)
 
 	db.Conn.Model(&user).UpdateColumns(updateValues)
 
@@ -93,15 +92,28 @@ func Get(w http.ResponseWriter, r *http.Request) {
 
 func Register(w http.ResponseWriter, r *http.Request) {
 
-	user := User{
-		DisplayName: r.FormValue("name"),
-		Email:       r.FormValue("email"),
-		Password:    r.FormValue("password"),
+	user := User{}
+
+	if r.FormValue("displayName") != "" {
+		user.DisplayName = r.FormValue("displayName")
+	} else {
+		user.DisplayName = "NULL"
+	}
+
+	_email := r.FormValue("email")
+	if _email != "" {
+		user.Email.Scan(_email)
+	}
+
+	if r.FormValue("password") != "" {
+		user.Password = r.FormValue("password")
+	} else {
+		user.Password = "NULL"
 	}
 
 	user.createSession()
 
-	if err := db.Conn.Create(&user).Error; err != nil {
+	if err := db.Conn.Debug().Create(&user).Error; err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		json.NewEncoder(w).Encode(err)
 		return
@@ -115,7 +127,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 // - Success: session string
 // - Failed: {}
 func Login(w http.ResponseWriter, r *http.Request) {
-	email := r.FormValue("email")
+	var email sql.NullString
+	email.Scan(r.FormValue("email"))
 	password := r.FormValue("password")
 
 	user := User{}
