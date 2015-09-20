@@ -82,12 +82,18 @@ func Get(w http.ResponseWriter, r *http.Request) {
 	userId, _ := strconv.Atoi(vars["userId"])
 
 	// TODO validate userId is number
-	var user User
-	db.Conn.Where(&User{Id: userId}).First(&user)
+	user := _getUserById(userId)
 
 	// w.Header().Set("Server", "A Go Web Server")
 	// w.WriteHeader(200)
 	json.NewEncoder(w).Encode(user)
+}
+
+func _getUserById(id int) User {
+	var u User
+	db.Conn.Where(&User{Id: id}).First(&u)
+
+	return u
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {

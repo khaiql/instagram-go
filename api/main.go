@@ -32,7 +32,19 @@ func main() {
 		Methods("POST")
 
 	router.
-		HandleFunc("/user/{userId}/photos", user.GetPhotos).
+		HandleFunc("/user/{userId}/photos", user.GetUserPhotos).
+		Methods("GET")
+
+	router.
+		HandleFunc("/photos", user.GetPhotos).
+		Methods("GET")
+
+	router.
+		HandleFunc("/photo/{photoId}/comment", user.PostComment).
+		Methods("POST")
+
+	router.
+		HandleFunc("/photo/{photoId}/comment", user.GetCommentsByPost).
 		Methods("GET")
 
 	// Bind to a port and pass our router in

@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-var connString = "root:123456@/instagram"
+var connString = "root:123456@/instagram?charset=utf8&parseTime=True"
 var Conn, _ = gorm.Open("mysql", connString)
 
 func init() {
