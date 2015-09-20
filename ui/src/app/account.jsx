@@ -20,11 +20,11 @@ var Account = React.createClass({
 
   componentDidMount() {
     jQuery.ajax({
-      url: `${Config.apiUrl}/user/1`,
+      url: `${Config.apiUrl}/user/${ Auth.getId() }`,
       success: (resp) => {
         this.setState({
           displayName: resp.DisplayName,
-          email: resp.Email,
+          email: resp.Email.String,
 
           // Backup for reset btn
           initialStates: {
@@ -49,24 +49,54 @@ var Account = React.createClass({
     let _email = this.state.email
 
     return (
-      <div>
-        <input 
-          type="text" 
-          ref="displayName"
-          valueLink={ this.linkState('displayName') }
-        />
-        <br />
-        <input 
-          type="text" 
-          ref="email"
-          valueLink={ this.linkState('email') }
-        />
+      <div className="container">
+        <form className="form-account">
+          <input 
+            className="form-control input-lg"
+            type="text" 
+            ref="displayName"
+            valueLink={ this.linkState('displayName') }
+          />
+
+          <input 
+            className="form-control input-lg"
+            type="text" 
+            ref="email"
+            valueLink={ this.linkState('email') }
+          />
+
+          <button
+            onClick={ this.update } 
+            className="btn btn-lg btn-primary btn-block" 
+            type="submit"
+          >Update</button>
+        </form>
       </div>
     )
   },
 
-  handleUpdate() {
+  update(e) {
+    e.preventDefault()
 
+    var _data = {
+      displayName: React.findDOMNode(this.refs.displayName).value,
+      email: React.findDOMNode(this.refs.email).value
+    }
+
+    jQuery.ajax({
+      url: `${Config.apiUrl}/user/${ Auth.getId() }`,
+      method: 'POST',
+      data: _data,
+      success: (resp) => {
+        // TODO
+        // Alert success
+        // Update displayName in storage
+        console.log(resp);
+      },
+      error: (jqXHR, textStatus, errorThrown) => {
+        alert(jqXHR.responseJSON.Message)
+      }
+    })
   }
 
 })

@@ -5,6 +5,7 @@ class Auth {
   constructor() {
     this.tokenStr = Config.ls.acc.token
     this.displayNameStr = Config.ls.acc.displayName
+    this.idStr = Config.ls.acc.id
     this.login()
   }
 
@@ -25,6 +26,7 @@ class Auth {
       data: data,
       success: (resp) => {
         this.setToken(resp.Token)
+        this.setId(resp.Id)
         this.setDisplayName(resp.DisplayName)
         // if (cb) cb(resp)
         location.reload()
@@ -63,6 +65,18 @@ class Auth {
 
   deleteDisplayName() {
     return localStorage.removeItem(this.displayNameStr)
+  }
+
+  getId() {
+    return localStorage.getItem(this.idStr)
+  }
+
+  setId(value) {
+    return localStorage.setItem(this.idStr, value)
+  }
+
+  deleteId() {
+    return localStorage.removeItem(this.idStr)
   }
 
   isLoggedIn() {

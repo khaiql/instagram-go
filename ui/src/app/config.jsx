@@ -6,6 +6,7 @@ const Config = {
   ls: {
     // Account
     acc: {
+      id: "${_prefix}id",
       displayName: "${_prefix}displayName",
       token: "${_prefix}token"
     }
