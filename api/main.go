@@ -40,6 +40,10 @@ func main() {
 		Methods("GET")
 
 	router.
+		HandleFunc("/photo", user.UploadPhoto).
+		Methods("POST")
+
+	router.
 		HandleFunc("/photo/{photoId}/comment", user.PostComment).
 		Methods("POST")
 

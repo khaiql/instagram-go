@@ -5,7 +5,9 @@ import (
 	// "fmt"
 	"github.com/gorilla/mux"
 	"github.com/triitvn/instagram-go/api/db"
+	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 )
@@ -20,14 +22,44 @@ type Photo struct {
 	Hashtags  []Hashtag `gorm:"many2many:photo_hashtag;"` // ! Do not put sql:"-"
 }
 
+func UploadPhoto(w http.ResponseWriter, r *http.Request) {
+	// the FormFile function takes in the POST input id file
+	file, header, _ := r.FormFile("file")
+	out, _ := os.Create("uploads/" + header.Filename)
+	defer out.Close()
+	io.Copy(out, file)
+
+	// Get user
+	u := User{
+		Token: r.FormValue("token"),
+	}
+	db.Conn.Where(u).First(&u)
+
+	// Save photo
+	photo := Photo{
+		Url:       header.Filename,
+		CreatedAt: time.Now(),
+		UserId:    u.Id,
+	}
+
+	db.Conn.Debug().Save(&photo)
+	json.NewEncoder(w).Encode(photo)
+}
+
 func (p *Photo) TableName() string {
 	return "photo"
 }
 
 func (p *Photo) AfterFind() (err error) {
 	db.Conn.Model(&p).
-		Related(&p.User, "UserId").
-		Related(&p.Comments).
+		Related(&p.User, "UserId")
+
+	db.Conn.Model(&p).
+		Order("id desc").
+		Related(&p.Comments)
+
+	db.Conn.Model(&p).
+		Order("name").
 		Related(&p.Hashtags, "Hashtags")
 
 	return
@@ -60,7 +92,7 @@ func GetPhotos(w http.ResponseWriter, r *http.Request) {
 		db.Conn.Where(&Hashtag{Name: tag}).First(&hashtag)
 		db.Conn.Model(&hashtag).Related(&photos, "Photos")
 	} else {
-		db.Conn.Find(&photos)
+		db.Conn.Order("created_at desc").Find(&photos)
 	}
 
 	json.NewEncoder(w).Encode(photos)
