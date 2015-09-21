@@ -43,8 +43,7 @@ class Navbar extends React.Component {
               className="form-inline navbar-form" 
               _lpchecked="1"
             >
-              <input className="form-control" type="text" placeholder="Search" />
-              <button className="btn btn-secondary-outline" type="submit">Search</button>
+              <input className="form-control" type="text" placeholder="Search by tag" />
             </form>
           ) : ''
         }

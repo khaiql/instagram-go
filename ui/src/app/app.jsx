@@ -5,6 +5,7 @@ import Register from './register.jsx'
 import Index from './index.jsx'
 import Login from './login.jsx'
 import Account from './account.jsx'
+import Tag from './tag.jsx'
 
 var { Route, RouteHandler, DefaultRoute, Link } = Router;
  
@@ -32,6 +33,7 @@ var routes = (
     <Route path="/login" handler={Login} />
     <Route path="/register" handler={Register} />
     <Route path="/account" handler={Account} />
+    <Route path="/tag/:tag" handler={Tag} />
   </Route>
 );
 
