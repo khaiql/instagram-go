@@ -2,10 +2,13 @@ package user
 
 import (
 	"encoding/json"
+	// "fmt"
 	"github.com/gorilla/mux"
 	"github.com/triitvn/instagram-go/api/db"
 	"net/http"
+	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -20,13 +23,35 @@ type Comment struct {
 
 func PostComment(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	_photoId, _ := strconv.Atoi(vars["photoId"])
 
 	c := Comment{}
 	c.UserId, _ = strconv.Atoi(r.FormValue("userId"))
-	c.PhotoId, _ = strconv.Atoi(vars["photoId"])
+	c.PhotoId = _photoId
 	c.Content = r.FormValue("content")
 
-	db.Conn.Save(&c)
+	u := User{
+		Token: r.FormValue("token"),
+	}
+
+	db.Conn.Where(u).First(&u)
+
+	c.UserId = u.Id
+	c.User = u
+
+	// Tag process
+	rx, _ := regexp.Compile("#(?:[[^]]+]|\\S+)")
+	tags := rx.FindAllString(c.Content, -1)
+
+	for i := range tags {
+		_name := strings.TrimPrefix(tags[i], "#")
+		hashtag := Hashtag{Name: _name}
+		// hashtag.Save()
+		db.Conn.Debug().Where(hashtag).FirstOrCreate(&hashtag)
+		db.Conn.Debug().Exec("INSERT INTO photo_hashtag (photo_id, hashtag_id) VALUES (?, ?)", _photoId, hashtag.Id)
+	}
+
+	// db.Conn.Save(&c)
 
 	json.NewEncoder(w).Encode(c)
 }

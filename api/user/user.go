@@ -96,6 +96,13 @@ func _getUserById(id int) User {
 	return u
 }
 
+func _getUserByToken(token string) User {
+	var u User
+	db.Conn.Where(&User{Token: token}).First(&u)
+
+	return u
+}
+
 func Register(w http.ResponseWriter, r *http.Request) {
 
 	user := User{}
