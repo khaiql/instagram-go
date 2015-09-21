@@ -45,17 +45,8 @@ func GetUserPhotos(w http.ResponseWriter, r *http.Request) {
 	var photos []Photo
 	vars := mux.Vars(r)
 	userId, _ := strconv.Atoi(vars["userId"])
-	db.Conn.Debug().Where(&Photo{UserId: userId}).Find(&photos)
-
-	var user User
-	db.Conn.Where(&User{Id: userId}).First(&user)
+	db.Conn.Where(&Photo{UserId: userId}).Find(&photos)
 	json.NewEncoder(w).Encode(photos)
-}
-
-func _getPhotoById(id int) Photo {
-	_photo := Photo{}
-	db.Conn.Where(&Photo{Id: id}).First(&_photo)
-	return _photo
 }
 
 func GetPhotos(w http.ResponseWriter, r *http.Request) {
