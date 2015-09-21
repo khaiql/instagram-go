@@ -2,6 +2,7 @@ package user
 
 import (
 	"encoding/json"
+	// "fmt"
 	"github.com/gorilla/mux"
 	"github.com/triitvn/instagram-go/api/db"
 	"net/http"
@@ -33,8 +34,9 @@ func (p *Photo) AfterFind() (err error) {
 }
 
 type Hashtag struct {
-	Id   int    `sql:"AUTO_INCREMENT"`
-	Name string `sql:"unique"`
+	Id     int     `sql:"AUTO_INCREMENT"`
+	Name   string  `sql:"unique"`
+	Photos []Photo `gorm:"many2many:photo_hashtag;"`
 }
 
 func (h *Hashtag) TableName() string {
@@ -51,7 +53,15 @@ func GetUserPhotos(w http.ResponseWriter, r *http.Request) {
 
 func GetPhotos(w http.ResponseWriter, r *http.Request) {
 	var photos []Photo
-	db.Conn.Find(&photos)
+	var tag = r.FormValue("tag")
+
+	if tag != "" {
+		var hashtag Hashtag
+		db.Conn.Where(&Hashtag{Name: tag}).First(&hashtag)
+		db.Conn.Model(&hashtag).Related(&photos, "Photos")
+	} else {
+		db.Conn.Find(&photos)
+	}
 
 	json.NewEncoder(w).Encode(photos)
 }

@@ -51,7 +51,7 @@ func PostComment(w http.ResponseWriter, r *http.Request) {
 		db.Conn.Debug().Exec("INSERT INTO photo_hashtag (photo_id, hashtag_id) VALUES (?, ?)", _photoId, hashtag.Id)
 	}
 
-	// db.Conn.Save(&c)
+	db.Conn.Save(&c)
 
 	json.NewEncoder(w).Encode(c)
 }
