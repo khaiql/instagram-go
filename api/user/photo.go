@@ -13,15 +13,32 @@ type Photo struct {
 	Id        int    `sql:"AUTO_INCREMENT"`
 	Url       string `sql:"type:varchar(200)"`
 	CreatedAt time.Time
-	UserId    int       `sql:"index"` // Foreign key (belongs to), tag `index` will create index for this field when using AutoMigrate
-	User      *User     `sql:"-"`
+	User      User      `sql:"-"`
+	UserId    int       `sql:"index"`
 	Comments  []Comment `sql:"-"`
-	Hashtags  []Hashtag `gorm:"many2many:photo_hashtag;"`
+	Hashtags  []Hashtag `gorm:"many2many:photo_hashtag;"` // ! Do not put sql:"-"
+}
+
+func (p *Photo) TableName() string {
+	return "photo"
+}
+
+func (p *Photo) AfterFind() (err error) {
+	db.Conn.Model(&p).
+		Related(&p.User, "UserId").
+		Related(&p.Comments).
+		Related(&p.Hashtags, "Hashtags")
+
+	return
 }
 
 type Hashtag struct {
 	Id   int    `sql:"AUTO_INCREMENT"`
 	Name string `sql:"unique"`
+}
+
+func (h *Hashtag) TableName() string {
+	return "hashtag"
 }
 
 func GetUserPhotos(w http.ResponseWriter, r *http.Request) {
@@ -30,16 +47,8 @@ func GetUserPhotos(w http.ResponseWriter, r *http.Request) {
 	userId, _ := strconv.Atoi(vars["userId"])
 	db.Conn.Debug().Where(&Photo{UserId: userId}).Find(&photos)
 
-	// TODO optimize this
 	var user User
-
-	db.Conn.Debug().Where(&User{Id: userId}).First(&user)
-
-	for i := range photos {
-		photos[i].User = &user
-		photos[i].Comments = _getCommentsByPhotoId(photos[i].Id)
-	}
-
+	db.Conn.Where(&User{Id: userId}).First(&user)
 	json.NewEncoder(w).Encode(photos)
 }
 
@@ -51,13 +60,7 @@ func _getPhotoById(id int) Photo {
 
 func GetPhotos(w http.ResponseWriter, r *http.Request) {
 	var photos []Photo
-	db.Conn.Debug().Find(&photos)
-
-	for i := range photos {
-		user := _getUserById(photos[i].UserId)
-		photos[i].User = &user
-		photos[i].Comments = _getCommentsByPhotoId(photos[i].Id)
-	}
+	db.Conn.Find(&photos)
 
 	json.NewEncoder(w).Encode(photos)
 }
