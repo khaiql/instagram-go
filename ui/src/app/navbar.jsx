@@ -1,25 +1,27 @@
 import React from 'react'
 import Auth from './auth.jsx'
-import { Link } from 'react-router'
+import { Navigation, Link } from 'react-router'
+import jQuery from 'jquery'
 
-class Navbar extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
+var Navbar = React.createClass({
+  mixins: [ Navigation ],
+
+  getInitialState() {
+    return {
       isLoggedIn: Auth.isLoggedIn(),
       displayName: Auth.getDisplayName()
     }
-  }
+  },
 
   setIsLoggedIn(isLoggedIn) {
     this.setState({
       isLoggedIn: isLoggedIn
     })
-  }
+  },
 
   handleLogout() {
     Auth.logout()
-  }
+  },
 
   render() {
     return(
@@ -40,10 +42,10 @@ class Navbar extends React.Component {
           this.state.isLoggedIn ? (
             <form 
               style={{ margin: 0 + 'px' }} 
-              className="form-inline navbar-form" 
-              _lpchecked="1"
+              className="form-inline navbar-form"
+              onSubmit={ this.search }
             >
-              <input className="form-control" type="text" placeholder="Search by tag" />
+              <input ref="search" className="form-control" type="text" placeholder="Search by tag" />
             </form>
           ) : ''
         }
@@ -52,7 +54,15 @@ class Navbar extends React.Component {
       </nav>
       </div>
     )
+  },
+
+  search(e) {
+    e.preventDefault()
+    var $input = jQuery(React.findDOMNode(this.refs.search))
+    var tag = $input.val()
+    $input.val('')
+    this.transitionTo(`/tag/${ tag }`)
   }
-}
+})
 
 export default Navbar
