@@ -76,12 +76,12 @@ class Photo extends React.Component {
             <Hashtags hashtags={ photo.Hashtags } />
           </figcaption>
         </figure>
-
-        <Comments comments={ photo.Comments } />
         
         <form onSubmit={ this.post } >
           <input className="formControl" type="text" ref="content" />
         </form>
+
+        <Comments comments={ photo.Comments } />
       </div>
     )
   }

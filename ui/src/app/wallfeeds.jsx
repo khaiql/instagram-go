@@ -2,6 +2,7 @@ import React from 'react'
 import jQuery from 'jquery'
 import Config from './config.jsx'
 import Photos from './photos.jsx'
+import Upload from './upload.jsx'
 
 class WallFeeds extends React.Component {
 
@@ -28,6 +29,7 @@ class WallFeeds extends React.Component {
     return (
       <div>
         <h1>WallFeeds</h1>
+        <Upload />
         <Photos photos={ this.state.photos } />
       </div>
     )
