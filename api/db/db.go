@@ -3,8 +3,8 @@ package db
 import (
 	// "database/sql"
 	// "fmt"
-	_ "github.com/triitvn/instagram-go/api/Godeps/_workspace/src/github.com/go-sql-driver/mysql"
-	"github.com/triitvn/instagram-go/api/Godeps/_workspace/src/github.com/jinzhu/gorm"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
 
 var connString = "root:123456@/instagram?charset=utf8&parseTime=True"
