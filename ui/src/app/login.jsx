@@ -8,7 +8,8 @@ class Login extends React.Component {
     super(props)
 
     this.state = {
-      isLoggedIn: Auth.isLoggedIn()
+      isLoggedIn: Auth.isLoggedIn(),
+      error: ""
     }
 
     // ES6 not auto bind this
@@ -34,7 +35,7 @@ class Login extends React.Component {
             placeholder="Password" 
             required
           />
-          <div className="checkbox">
+          <div className="checkbox hidden">
             <label>
               <input 
                 ref="remember"
@@ -43,6 +44,14 @@ class Login extends React.Component {
               /> Remember me
             </label>
           </div>
+
+          {
+            this.state.error != "" ? (
+              <div className="alert alert-danger text-center" role="alert">
+                Login Failed
+              </div>
+            ) : ""
+          }
 
           <button onClick={ this.login } className="btn btn-lg btn-primary btn-block" type="submit">Login</button>
         </form>
@@ -58,12 +67,16 @@ class Login extends React.Component {
     let _data = {
       email: React.findDOMNode(this.refs.email).value,
       password: React.findDOMNode(this.refs.password).value,
-      remember: React.findDOMNode(this.refs.remember).checked
+      // remember: React.findDOMNode(this.refs.remember).checked
     }
 
     // TODO validate input
     
-    Auth.login(_data)
+    Auth.login(_data, function(){}, ()=>{
+      this.setState({
+        error: "Login Failed"
+      })
+    }.bind(this))
   }
 }
 

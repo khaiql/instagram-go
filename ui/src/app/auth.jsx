@@ -9,7 +9,7 @@ class Auth {
     this.login()
   }
 
-  login(data, cb) {
+  login(data, cb, cb_e) {
     cb = arguments[arguments.length - 1]
 
     let _isLoggedIn = this.isLoggedIn()
@@ -28,11 +28,11 @@ class Auth {
         this.setToken(resp.Token)
         this.setId(resp.Id)
         this.setDisplayName(resp.DisplayName)
-        // if (cb) cb(resp)
+        alert('Login successfully')
         location.reload()
       },
-      error: (resp)=> {
-        alert('Login failed')
+      error: ()=> {
+        cb_e()
       }
     })
   }

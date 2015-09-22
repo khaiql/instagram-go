@@ -18,13 +18,13 @@ class Comments extends React.Component {
     }
 
     return (
-      <ul className="list-group">
+      <ul className="list-group comment">
       {
         comments.map((comment) => {
           return (
             <li key={ comment.Id } className="list-group-item">
               { comment.Content }<br />
-              <span className="text-muted">
+              <span className="text-muted t-tertiary">
                 { Moment(comment.CreatedAt).fromNow() } by { comment.User.DisplayName  }
               </span>
             </li>
@@ -47,7 +47,7 @@ class Hashtags extends React.Component {
       {
         this.props.hashtags.map((hashtag) => {
           return (
-            <Link to={ "/tag/" + hashtag.Name } key={ hashtag.Id } className="label label-info">
+            <Link to={ "/tag/" + hashtag.Name } key={ hashtag.Id } className="label label-primary">
               #{ hashtag.Name }
             </Link>
           )
@@ -70,15 +70,18 @@ class Photo extends React.Component {
       <div className="card" key={ photo.Id }>
         <figure className="figure">
           <img className="img-responsive img-rounded" src={  photo.Url } alt="" />
-          <figcaption className="figure-caption">
+          <figcaption className="figure-caption clearfix">
             { Moment(photo.CreatedAt).fromNow() } by { photo.User.DisplayName }
-            <br />
-            <Hashtags hashtags={ photo.Hashtags } />
+            <div className="pull-right">
+              <Hashtags hashtags={ photo.Hashtags } />
+            </div>
           </figcaption>
         </figure>
+
+        <hr />
         
         <form onSubmit={ this.post } >
-          <input className="formControl" type="text" ref="content" />
+          <input className="form-control" type="text" ref="content" placeholder="What are you thinking?" />
         </form>
 
         <Comments comments={ photo.Comments } />
@@ -103,7 +106,10 @@ class Photo extends React.Component {
       },
       success: (resp) => {
         jQuery($input).val('')
-        this.props.photo.Comments.push(resp)
+        if (this.props.photo.Comments == null) {
+          this.props.photo.Comments = []
+        }
+        this.props.photo.Comments.unshift(resp)
         this.forceUpdate()
       }.bind(this)
     })
