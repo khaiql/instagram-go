@@ -68,6 +68,7 @@ class Photo extends React.Component {
     var photo = this.props.photo
     return(
       <div className="card" key={ photo.Id }>
+      <div className="card-block">
         <figure className="figure">
           <img className="img-responsive img-rounded" src={  photo.Url } alt="" />
           <figcaption className="figure-caption clearfix">
@@ -85,6 +86,7 @@ class Photo extends React.Component {
         </form>
 
         <Comments comments={ photo.Comments } />
+      </div>
       </div>
     )
   }
@@ -123,16 +125,12 @@ class Photos extends React.Component {
 
   render() {
     return(
-      <div className="container">
-      <div className="row">
-      <div className="col-md-6 col-md-push-3">
+      <div>
       {
         this.props.photos.map((photo) => {
           return <Photo key={ photo.Id } photo={ photo } />
         })
       }
-      </div>
-      </div>
       </div>
     )
   }

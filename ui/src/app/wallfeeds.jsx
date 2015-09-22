@@ -27,12 +27,23 @@ class WallFeeds extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>WallFeeds</h1>
-        <Upload />
+      <div className="container">
+      <div className="row">
+      <div className="col-md-6 col-md-push-3">
+        <br />
+        
+        <Upload unshiftPhoto={ this.unshiftPhoto.bind(this) } />
+
         <Photos photos={ this.state.photos } />
       </div>
+      </div>
+      </div>
     )
+  }
+
+  unshiftPhoto(photo) {
+    this.state.photos.unshift(photo)
+    this.forceUpdate()
   }
 
 }

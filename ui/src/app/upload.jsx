@@ -14,16 +14,20 @@ class Upload extends React.Component {
     }
 
     this.onDrop = this.onDrop.bind(this)
-    this.upload = this.upload.bind(this)
   }
 
   render() {
     return (
-      <div>
+      <div className="container">
+      <div className="row">
+      <div className="col-md-6 col-md-push-3 text-center">
         <Dropzone ref="dropzone" onDrop={this.onDrop} >
-          <div>Try dropping some files here, or click to select files to upload.</div>
+          <div>Drag&Drop to post you monent</div>
         </Dropzone>
-        <button onClick={ this.upload } className="form-control">Upload</button>
+        <br />
+        <br />
+      </div>
+      </div>
       </div>
     )
   }
@@ -45,21 +49,9 @@ class Upload extends React.Component {
       dataType: 'json',
       data: data,
       success: (resp) => {
-        console.log(resp);
-      }
-    })
-  }
-
-  upload() {
-    jQuery.ajax({
-      url: `${Config.apiUrl}/photo`,
-      enctype: 'multipart/form-data',
-      type: "POST",
-      data: {
-        file: this.state.file
-      },
-      success: (resp) => {
-        console.log(resp);
+        this.props.unshiftPhoto(resp)
+        // console.log(resp);
+        // location.reload()
       }
     })
   }

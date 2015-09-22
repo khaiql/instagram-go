@@ -51,6 +51,7 @@ var Account = React.createClass({
     return (
       <div className="container account-page">
       <div className="card">
+      <div className="card-block">
         <h4 className="card-title text-center text-muted">Your account</h4>
         <br />
 
@@ -81,6 +82,7 @@ var Account = React.createClass({
           >Update</button>
         </fieldset>
         </form>
+      </div>
       </div>
       </div>
     )
