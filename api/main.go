@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"github.com/triitvn/instagram-go/api/Godeps/_workspace/src/github.com/gorilla/mux"
 	"github.com/triitvn/instagram-go/api/user"
 	"log"
@@ -8,6 +9,11 @@ import (
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	// Route settings
 	router := mux.NewRouter().StrictSlash(true)
 
