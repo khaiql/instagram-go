@@ -49,28 +49,39 @@ var Account = React.createClass({
     let _email = this.state.email
 
     return (
-      <div className="container">
-        <form className="form-account">
+      <div className="container account-page">
+      <div className="card">
+        <h4 className="card-title text-center text-muted">Your account</h4>
+        <br />
+
+        <form>
+        <fieldset className="form-group">
           <input 
             className="form-control input-lg"
             type="text" 
             ref="displayName"
             valueLink={ this.linkState('displayName') }
           />
+        </fieldset>
 
+        <fieldset className="form-group">
           <input 
             className="form-control input-lg"
             type="text" 
             ref="email"
             valueLink={ this.linkState('email') }
           />
+        </fieldset>
 
+        <fieldset class="form-group">
           <button
             onClick={ this.update } 
             className="btn btn-lg btn-primary btn-block" 
             type="submit"
           >Update</button>
+        </fieldset>
         </form>
+      </div>
       </div>
     )
   },
@@ -88,10 +99,9 @@ var Account = React.createClass({
       method: 'POST',
       data: _data,
       success: (resp) => {
-        // TODO
-        // Alert success
-        // Update displayName in storage
-        console.log(resp);
+        alert("Update successfully")
+        Auth.setDisplayName(_data.displayName)
+        location.reload()
       },
       error: (jqXHR, textStatus, errorThrown) => {
         alert(jqXHR.responseJSON.Message)
