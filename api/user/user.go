@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	// "fmt"
 	"database/sql"
-	"github.com/gorilla/mux"
+	"github.com/triitvn/instagram-go/api/Godeps/_workspace/src/github.com/gorilla/mux"
 	"github.com/triitvn/instagram-go/api/db"
 	"net/http"
 	"strconv"
