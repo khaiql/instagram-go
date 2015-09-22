@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
+	"github.com/triitvn/instagram-go/Godeps/_workspace/src/github.com/gorilla/mux"
 	"github.com/triitvn/instagram-go/api/user"
 	"log"
 	"net/http"

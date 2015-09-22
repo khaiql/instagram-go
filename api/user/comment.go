@@ -3,7 +3,7 @@ package user
 import (
 	"encoding/json"
 	// "fmt"
-	"github.com/gorilla/mux"
+	"github.com/triitvn/instagram-go/Godeps/_workspace/src/github.com/gorilla/mux"
 	"github.com/triitvn/instagram-go/api/db"
 	"net/http"
 	"regexp"
