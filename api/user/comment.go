@@ -56,6 +56,15 @@ func PostComment(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(c)
 }
 
+func (c *Comment) TableName() string {
+	return "comment"
+}
+
+func (c *Comment) AfterFind() (err error) {
+	db.Conn.Model(&c).Related(&c.User, "UserId")
+	return
+}
+
 func GetCommentsByPost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	photoId, _ := strconv.Atoi(vars["photoId"])
@@ -66,10 +75,5 @@ func GetCommentsByPost(w http.ResponseWriter, r *http.Request) {
 func _getCommentsByPhotoId(photoId int) []Comment {
 	var comments []Comment
 	db.Conn.Where(&Comment{PhotoId: photoId}).Find(&comments)
-
-	for i := range comments {
-		comments[i].User = _getUserById(comments[i].UserId)
-	}
-
 	return comments
 }
