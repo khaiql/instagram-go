@@ -18,6 +18,11 @@ class Login extends React.Component {
   }
 
   render() {
+    if (Auth.isLoggedIn()) {
+      this.transitionTo('/')
+      return <div />
+    }
+    
     return(
       <div className="container">
 
