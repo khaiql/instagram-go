@@ -19,6 +19,8 @@ func main() {
 	if os.Getenv("ENV") != "production" {
 		factory.AutoMigrate()
 		s3s.Test()
+	} else {
+		log.Println("Production")
 	}
 
 	// Route settings
