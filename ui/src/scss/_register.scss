@@ -1,0 +1,27 @@
+.form-register {
+  margin: auto auto;
+  margin-bottom: 30px;
+  margin-top: 50px;
+  max-width: 330px;
+  position: relative;
+
+  .display-name, .email {
+    position: relative;
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    &:focus {
+      z-index: 3;
+    }
+  }
+
+  .email, .password {
+    position: relative;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  
+  .password {
+    margin-bottom: 20px;
+  }
+}
