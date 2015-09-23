@@ -37494,6 +37494,10 @@ var _reactRouter = require('react-router');
 
 var _reactRouter2 = _interopRequireDefault(_reactRouter);
 
+var _photosJsx = require('./photos.jsx');
+
+var _photosJsx2 = _interopRequireDefault(_photosJsx);
+
 var Account = _reactAddons2['default'].createClass({
   displayName: 'Account',
 
@@ -37506,7 +37510,8 @@ var Account = _reactAddons2['default'].createClass({
       initialStates: {
         displayName: null,
         email: null
-      }
+      },
+      photos: []
     };
   },
 
@@ -37531,6 +37536,17 @@ var Account = _reactAddons2['default'].createClass({
         console.log('error');
       }
     });
+
+    _jquery2['default'].ajax({
+      url: _configJsx2['default'].apiUrl + '/user/' + _authJsx2['default'].getId() + '/photos',
+      success: function success(resp) {
+        _this.state.photos = _this.state.photos.concat(resp);
+        _this.forceUpdate();
+      },
+      error: function error(resp) {
+        console.log('error');
+      }
+    });
   },
 
   render: function render() {
@@ -37544,56 +37560,75 @@ var Account = _reactAddons2['default'].createClass({
 
     return _reactAddons2['default'].createElement(
       'div',
-      { className: 'container account-page' },
+      { className: 'container' },
       _reactAddons2['default'].createElement(
         'div',
-        { className: 'card' },
+        { className: 'row' },
+        _reactAddons2['default'].createElement('br', null),
+        _reactAddons2['default'].createElement('br', null),
         _reactAddons2['default'].createElement(
           'div',
-          { className: 'card-block' },
+          { className: 'col-sm-4' },
           _reactAddons2['default'].createElement(
             'h4',
-            { className: 'card-title text-center text-muted' },
+            { className: 'text-center text-muted' },
             'Your account'
           ),
-          _reactAddons2['default'].createElement('br', null),
           _reactAddons2['default'].createElement(
-            'form',
-            null,
+            'div',
+            { className: 'card' },
             _reactAddons2['default'].createElement(
-              'fieldset',
-              { className: 'form-group' },
-              _reactAddons2['default'].createElement('input', {
-                className: 'form-control input-lg',
-                type: 'text',
-                ref: 'displayName',
-                valueLink: this.linkState('displayName')
-              })
-            ),
-            _reactAddons2['default'].createElement(
-              'fieldset',
-              { className: 'form-group' },
-              _reactAddons2['default'].createElement('input', {
-                className: 'form-control input-lg',
-                type: 'text',
-                ref: 'email',
-                valueLink: this.linkState('email')
-              })
-            ),
-            _reactAddons2['default'].createElement(
-              'fieldset',
-              { 'class': 'form-group' },
+              'div',
+              { className: 'card-block' },
               _reactAddons2['default'].createElement(
-                'button',
-                {
-                  onClick: this.update,
-                  className: 'btn btn-lg btn-primary btn-block',
-                  type: 'submit'
-                },
-                'Update'
+                'form',
+                null,
+                _reactAddons2['default'].createElement(
+                  'fieldset',
+                  { className: 'form-group' },
+                  _reactAddons2['default'].createElement('input', {
+                    className: 'form-control input-lg',
+                    type: 'text',
+                    ref: 'displayName',
+                    valueLink: this.linkState('displayName')
+                  })
+                ),
+                _reactAddons2['default'].createElement(
+                  'fieldset',
+                  { className: 'form-group' },
+                  _reactAddons2['default'].createElement('input', {
+                    className: 'form-control input-lg',
+                    type: 'text',
+                    ref: 'email',
+                    valueLink: this.linkState('email')
+                  })
+                ),
+                _reactAddons2['default'].createElement(
+                  'fieldset',
+                  { className: 'form-group' },
+                  _reactAddons2['default'].createElement(
+                    'button',
+                    {
+                      onClick: this.update,
+                      className: 'btn btn-lg btn-primary btn-block',
+                      type: 'submit'
+                    },
+                    'Update'
+                  )
+                )
               )
             )
           )
+        ),
+        _reactAddons2['default'].createElement(
+          'div',
+          { className: 'col-sm-8' },
+          _reactAddons2['default'].createElement(
+            'h4',
+            { className: 'card-title text-center text-muted' },
+            'Your Photos'
+          ),
+          _reactAddons2['default'].createElement(_photosJsx2['default'], { photos: this.state.photos })
         )
       )
     );
@@ -37627,7 +37662,7 @@ var Account = _reactAddons2['default'].createClass({
 exports['default'] = Account;
 module.exports = exports['default'];
 
-},{"./auth.jsx":220,"./config.jsx":221,"jquery":2,"react-router":30,"react/addons":45}],219:[function(require,module,exports){
+},{"./auth.jsx":220,"./config.jsx":221,"./photos.jsx":225,"jquery":2,"react-router":30,"react/addons":45}],219:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -37700,7 +37735,7 @@ var App = (function (_React$Component) {
         _react2['default'].createElement(
           'main',
           null,
-          _react2['default'].createElement(RouteHandler, null)
+          _react2['default'].createElement(RouteHandler, { lorem: 'ipsum' })
         ),
         _react2['default'].createElement('footer', null)
       );
@@ -37760,8 +37795,6 @@ var Auth = (function () {
     value: function login(data, cb, cb_e) {
       var _this = this;
 
-      cb = arguments[arguments.length - 1];
-
       var _isLoggedIn = this.isLoggedIn();
 
       // Logged in
@@ -37774,13 +37807,15 @@ var Auth = (function () {
       _jquery2['default'].ajax({
         url: _configJsx2['default'].apiUrl + '/user/login',
         data: data,
-        success: function success(resp) {
-          _this.setToken(resp.Token);
-          _this.setId(resp.Id);
-          _this.setDisplayName(resp.DisplayName);
-          alert('Login successfully');
-          location.reload();
-        },
+        success: (function (resp) {
+          cb();
+          setTimeout((function () {
+            _this.setToken(resp.Token);
+            _this.setId(resp.Id);
+            _this.setDisplayName(resp.DisplayName);
+            location.reload();
+          }).bind(_this), 1000);
+        }).bind(this),
         error: function error() {
           cb_e();
         }
@@ -37860,7 +37895,7 @@ Object.defineProperty(exports, '__esModule', {
 var _prefix = 'sss_';
 
 var Config = {
-  apiUrl: 'http://sssphotos.net:3000',
+  apiUrl: window['apiUrl'] || 'http://localhost:3000',
   // Local Storage
   ls: {
     // Account
@@ -37947,15 +37982,7 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = require('react');
 
@@ -37967,105 +37994,109 @@ var _authJsx = require('./auth.jsx');
 
 var _authJsx2 = _interopRequireDefault(_authJsx);
 
-var Login = (function (_React$Component) {
-  _inherits(Login, _React$Component);
+var Login = _react2['default'].createClass({
+  displayName: 'Login',
 
-  function Login(props) {
-    _classCallCheck(this, Login);
+  mixins: [_reactRouter.Navigation],
 
-    _get(Object.getPrototypeOf(Login.prototype), 'constructor', this).call(this, props);
-
-    this.state = {
+  getInitialState: function getInitialState() {
+    return {
       isLoggedIn: _authJsx2['default'].isLoggedIn(),
-      error: ""
+      error: "",
+      success: ""
     };
+  },
 
-    // ES6 not auto bind this
-    this.login = this.login.bind(this);
-  }
+  render: function render() {
+    if (_authJsx2['default'].isLoggedIn()) {
+      this.transitionTo('/');
+      return _react2['default'].createElement('div', null);
+    }
 
-  _createClass(Login, [{
-    key: 'render',
-    value: function render() {
-      return _react2['default'].createElement(
-        'div',
-        { className: 'container' },
+    return _react2['default'].createElement(
+      'div',
+      { className: 'container' },
+      _react2['default'].createElement(
+        'form',
+        { className: 'form-login' },
+        _react2['default'].createElement('input', {
+          ref: 'email',
+          type: 'email',
+          className: 'form-control input-lg email',
+          placeholder: 'Email address',
+          required: true,
+          autofocus: true
+        }),
+        _react2['default'].createElement('input', {
+          ref: 'password',
+          type: 'password',
+          className: 'form-control input-lg password',
+          placeholder: 'Password',
+          required: true
+        }),
         _react2['default'].createElement(
-          'form',
-          { className: 'form-login' },
-          _react2['default'].createElement('input', {
-            ref: 'email',
-            type: 'email',
-            className: 'form-control input-lg email',
-            placeholder: 'Email address',
-            required: true,
-            autofocus: true
-          }),
-          _react2['default'].createElement('input', {
-            ref: 'password',
-            type: 'password',
-            className: 'form-control input-lg password',
-            placeholder: 'Password',
-            required: true
-          }),
+          'div',
+          { className: 'checkbox hidden' },
           _react2['default'].createElement(
-            'div',
-            { className: 'checkbox hidden' },
-            _react2['default'].createElement(
-              'label',
-              null,
-              _react2['default'].createElement('input', {
-                ref: 'remember',
-                type: 'checkbox',
-                defaultChecked: 'checked'
-              }),
-              ' Remember me'
-            )
-          ),
-          this.state.error != "" ? _react2['default'].createElement(
-            'div',
-            { className: 'alert alert-danger text-center', role: 'alert' },
-            'Login Failed'
-          ) : "",
-          _react2['default'].createElement(
-            'button',
-            { onClick: this.login, className: 'btn btn-lg btn-primary btn-block', type: 'submit' },
-            'Login'
+            'label',
+            null,
+            _react2['default'].createElement('input', {
+              ref: 'remember',
+              type: 'checkbox',
+              defaultChecked: 'checked'
+            }),
+            ' Remember me'
           )
         ),
+        this.state.error != "" ? _react2['default'].createElement(
+          'div',
+          { className: 'alert alert-danger text-center', role: 'alert' },
+          'Login Failed'
+        ) : "",
+        this.state.success != "" ? _react2['default'].createElement(
+          'div',
+          { className: 'alert alert-success text-center', role: 'alert' },
+          'Login Successfully'
+        ) : "",
         _react2['default'].createElement(
-          _reactRouter.Link,
-          { to: '/register', className: 'btn btn-link btn-block', type: 'button' },
-          'Register now!'
+          'button',
+          { onClick: this.login, className: 'btn btn-lg btn-primary btn-block', type: 'submit' },
+          'Login'
         )
-      ) // .container
-      ;
-    }
-  }, {
-    key: 'login',
-    value: function login(e) {
-      var _this = this;
+      ),
+      _react2['default'].createElement(
+        _reactRouter.Link,
+        { to: '/register', className: 'btn btn-link btn-block', type: 'button' },
+        'Register now!'
+      )
+    ) // .container
+    ;
+  },
 
-      e.preventDefault();
+  login: function login(e) {
+    var _this = this;
 
-      var _data = {
-        email: _react2['default'].findDOMNode(this.refs.email).value,
-        password: _react2['default'].findDOMNode(this.refs.password).value
-      };
+    e.preventDefault();
 
-      // remember: React.findDOMNode(this.refs.remember).checked
-      // TODO validate input
+    var _data = {
+      email: _react2['default'].findDOMNode(this.refs.email).value,
+      password: _react2['default'].findDOMNode(this.refs.password).value
+    };
 
-      _authJsx2['default'].login(_data, function () {}, (function () {
-        _this.setState({
-          error: "Login Failed"
-        });
-      }).bind(this));
-    }
-  }]);
+    // remember: React.findDOMNode(this.refs.remember).checked
+    // TODO validate input
 
-  return Login;
-})(_react2['default'].Component);
+    _authJsx2['default'].login(_data, (function () {
+      _this.setState({
+        success: true
+      });
+    }).bind(this), (function () {
+      _this.setState({
+        error: true
+      });
+    }).bind(this));
+  }
+});
 
 exports['default'] = Login;
 module.exports = exports['default'];
@@ -38416,8 +38447,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
-var _reactRouter2 = _interopRequireDefault(_reactRouter);
-
 var _configJsx = require('./config.jsx');
 
 var _configJsx2 = _interopRequireDefault(_configJsx);
@@ -38433,7 +38462,14 @@ var _authJsx2 = _interopRequireDefault(_authJsx);
 var Register = _react2['default'].createClass({
   displayName: 'Register',
 
-  mixins: [_reactRouter2['default'].Navigation],
+  mixins: [_reactRouter.Navigation],
+
+  getInitialState: function getInitialState() {
+    return {
+      error: "",
+      success: false
+    };
+  },
 
   render: function render() {
     if (_authJsx2['default'].isLoggedIn()) {
@@ -38469,6 +38505,16 @@ var Register = _react2['default'].createClass({
           placeholder: 'Password',
           required: true
         }),
+        this.state.error != "" ? _react2['default'].createElement(
+          'div',
+          { className: 'alert alert-danger text-center', role: 'alert' },
+          this.state.error
+        ) : "",
+        this.state.success != "" ? _react2['default'].createElement(
+          'div',
+          { className: 'alert alert-success text-center', role: 'alert' },
+          'Register Successfully'
+        ) : "",
         _react2['default'].createElement(
           'button',
           {
@@ -38478,6 +38524,11 @@ var Register = _react2['default'].createClass({
           },
           'Register'
         )
+      ),
+      _react2['default'].createElement(
+        _reactRouter.Link,
+        { to: '/login', className: 'btn btn-link btn-block', type: 'button' },
+        'Login'
       )
     );
   },
@@ -38493,18 +38544,39 @@ var Register = _react2['default'].createClass({
       password: _react2['default'].findDOMNode(this.refs.password).value
     };
 
+    if (!_data.displayName || !_data.email || !_data.password) {
+
+      this.setState({
+        error: "Missing some fields"
+      });
+
+      return;
+    }
+
     _jquery2['default'].ajax({
       url: _configJsx2['default'].apiUrl + '/user',
       method: 'POST',
       data: _data,
       success: function success(resp) {
-        _authJsx2['default'].setToken(resp.token);
-        _this.transitionTo('/');
-        return location.reload();
+        _this.setState({
+          success: true
+        });
+
+        _authJsx2['default'].setToken(resp.Token);
+        _authJsx2['default'].setDisplayName(resp.DisplayName);
+        _authJsx2['default'].setId(resp.Id);
+
+        setTimeout((function () {
+          // this.transitionTo('/')
+          location.reload();
+        }).bind(_this), 1000);
       },
-      error: function error(jqXHR, textStatus, errorThrown) {
-        alert(jqXHR.responseJSON.Message);
-      }
+      error: (function (jqXHR, textStatus, errorThrown) {
+        // alert(jqXHR.responseJSON.Message)
+        _this.setState({
+          error: "Email existed"
+        });
+      }).bind(this)
     });
   }
 
@@ -38520,23 +38592,13 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
-
-var _reactRouter2 = _interopRequireDefault(_reactRouter);
 
 var _jquery = require('jquery');
 
@@ -38550,69 +38612,72 @@ var _photosJsx = require('./photos.jsx');
 
 var _photosJsx2 = _interopRequireDefault(_photosJsx);
 
-var Tag = (function (_React$Component) {
-  _inherits(Tag, _React$Component);
+var _authJsx = require('./auth.jsx');
 
-  function Tag(props) {
-    _classCallCheck(this, Tag);
+var _authJsx2 = _interopRequireDefault(_authJsx);
 
-    _get(Object.getPrototypeOf(Tag.prototype), 'constructor', this).call(this, props);
-    this.state = {
+var Tag = _react2['default'].createClass({
+  displayName: 'Tag',
+
+  mixins: [_reactRouter.Navigation],
+
+  getInitialState: function getInitialState() {
+    return {
       photos: [],
       tag: null
     };
-  }
+  },
 
-  _createClass(Tag, [{
-    key: 'render',
-    value: function render() {
-      var _this = this;
+  render: function render() {
+    var _this = this;
 
-      var tag = this.props.params.tag;
+    if (!_authJsx2['default'].isLoggedIn()) {
+      this.transitionTo('/');
+      return _react2['default'].createElement('div', null);
+    }
 
-      if (tag !== this.state.tag) {
-        _jquery2['default'].ajax({
-          url: _configJsx2['default'].apiUrl + '/photos?tag=' + tag,
-          success: (function (resp) {
-            _this.setState({
-              tag: tag,
-              photos: resp
-            });
-          }).bind(this)
-        });
-      }
+    var tag = this.props.params.tag;
 
-      return _react2['default'].createElement(
+    if (tag !== this.state.tag) {
+      _jquery2['default'].ajax({
+        url: _configJsx2['default'].apiUrl + '/photos?tag=' + tag,
+        success: (function (resp) {
+          _this.setState({
+            tag: tag,
+            photos: resp
+          });
+        }).bind(this)
+      });
+    }
+
+    return _react2['default'].createElement(
+      'div',
+      { className: 'container' },
+      _react2['default'].createElement(
         'div',
-        { className: 'container' },
+        { className: 'row' },
         _react2['default'].createElement(
           'div',
-          { className: 'row' },
+          { className: 'col-md-6 col-md-push-3' },
+          _react2['default'].createElement('br', null),
           _react2['default'].createElement(
-            'div',
-            { className: 'col-md-6 col-md-push-3' },
-            _react2['default'].createElement('br', null),
-            _react2['default'].createElement(
-              'h1',
-              { className: 'text-center text-muted' },
-              '#',
-              this.props.params.tag
-            ),
-            _react2['default'].createElement('br', null),
-            _react2['default'].createElement(_photosJsx2['default'], { photos: this.state.photos })
-          )
+            'h1',
+            { className: 'text-center text-muted' },
+            '#',
+            this.props.params.tag
+          ),
+          _react2['default'].createElement('br', null),
+          _react2['default'].createElement(_photosJsx2['default'], { photos: this.state.photos })
         )
-      );
-    }
-  }]);
-
-  return Tag;
-})(_react2['default'].Component);
+      )
+    );
+  }
+});
 
 exports['default'] = Tag;
 module.exports = exports['default'];
 
-},{"./config.jsx":221,"./photos.jsx":225,"jquery":2,"react":217,"react-router":30}],228:[function(require,module,exports){
+},{"./auth.jsx":220,"./config.jsx":221,"./photos.jsx":225,"jquery":2,"react":217,"react-router":30}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -38682,7 +38747,10 @@ var Upload = (function (_React$Component) {
               _react2['default'].createElement(
                 'div',
                 null,
-                'Drag&Drop to post you monent'
+                _react2['default'].createElement('br', null),
+                'Drag&Drop',
+                _react2['default'].createElement('br', null),
+                ' to post you monent'
               )
             ),
             _react2['default'].createElement('br', null),

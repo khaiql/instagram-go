@@ -1,19 +1,26 @@
 import React from 'react'
-import Router from 'react-router'
+import { Navigation } from 'react-router'
 import jQuery from 'jquery'
 import Config from './config.jsx'
 import Photos from './photos.jsx'
+import Auth from './auth.jsx'
 
-class Tag extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
+var Tag = React.createClass({
+  mixins: [ Navigation ],
+
+  getInitialState() {
+    return {
       photos: [],
       tag: null
     }
-  }
+  },
 
   render() {
+    if (!Auth.isLoggedIn()) {
+      this.transitionTo('/')
+      return <div />
+    }
+
     var tag = this.props.params.tag
 
     if (tag !== this.state.tag) {
@@ -43,6 +50,6 @@ class Tag extends React.Component {
       </div>
     )
   }
-}
+})
 
 export default Tag

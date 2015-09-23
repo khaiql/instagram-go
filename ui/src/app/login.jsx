@@ -1,24 +1,27 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { Navigation, Link } from 'react-router'
 import Auth from './auth.jsx'
 
-class Login extends React.Component {
+var Login = React.createClass({
+  mixins: [ Navigation ],
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
+  getInitialState() {
+    return {
       isLoggedIn: Auth.isLoggedIn(),
-      error: ""
+      error: "",
+      success: "",
     }
-
-    // ES6 not auto bind this
-    this.login = this.login.bind(this)
-  }
+  },
 
   render() {
+    if (Auth.isLoggedIn()) {
+      this.transitionTo('/')
+      return <div />
+    }
+    
     return(
       <div className="container">
+
         <form className="form-login">
           <input 
             ref="email"
@@ -53,13 +56,21 @@ class Login extends React.Component {
             ) : ""
           }
 
+          {
+            this.state.success != "" ? (
+              <div className="alert alert-success text-center" role="alert">
+                Login Successfully
+              </div>
+            ) : ""
+          }
+
           <button onClick={ this.login } className="btn btn-lg btn-primary btn-block" type="submit">Login</button>
         </form>
 
         <Link to="/register" className="btn btn-link btn-block" type="button">Register now!</Link>
       </div> // .container
     )
-  }
+  },
 
   login(e) {
     e.preventDefault()
@@ -72,12 +83,17 @@ class Login extends React.Component {
 
     // TODO validate input
     
-    Auth.login(_data, function(){}, ()=>{
-      this.setState({
-        error: "Login Failed"
-      })
-    }.bind(this))
-  }
-}
+    Auth.login(_data, ()=>{
+        this.setState({
+          success: true
+        })
+      }.bind(this), ()=>{
+        this.setState({
+          error: true
+        })
+      }.bind(this)
+    )
+  },
+})
 
 export default Login

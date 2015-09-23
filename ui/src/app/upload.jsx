@@ -22,7 +22,7 @@ class Upload extends React.Component {
       <div className="row">
       <div className="col-md-6 col-md-push-3 text-center">
         <Dropzone ref="dropzone" onDrop={this.onDrop} >
-          <div>Drag&Drop to post you monent</div>
+          <div><br />Drag&Drop<br /> to post you monent</div>
         </Dropzone>
         <br />
         <br />

@@ -10,8 +10,6 @@ class Auth {
   }
 
   login(data, cb, cb_e) {
-    cb = arguments[arguments.length - 1]
-
     let _isLoggedIn = this.isLoggedIn()
 
     // Logged in
@@ -25,12 +23,14 @@ class Auth {
       url: `${Config.apiUrl}/user/login`,
       data: data,
       success: (resp) => {
-        this.setToken(resp.Token)
-        this.setId(resp.Id)
-        this.setDisplayName(resp.DisplayName)
-        alert('Login successfully')
-        location.reload()
-      },
+        cb()
+        setTimeout(()=>{
+          this.setToken(resp.Token)
+          this.setId(resp.Id)
+          this.setDisplayName(resp.DisplayName)
+          location.reload()
+        }.bind(this), 1000)
+      }.bind(this),
       error: ()=> {
         cb_e()
       }

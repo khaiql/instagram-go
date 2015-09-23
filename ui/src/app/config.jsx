@@ -1,7 +1,7 @@
 let _prefix = 'sss_'
 
 const Config = {
-  apiUrl: 'http://sssphotos.net:3000',
+  apiUrl: window['apiUrl'] || 'http://localhost:3000',
   // Local Storage
   ls: {
     // Account

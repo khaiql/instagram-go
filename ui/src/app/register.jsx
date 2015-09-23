@@ -1,11 +1,18 @@
 import React from 'react'
-import Router from 'react-router'
+import { Link, Navigation } from 'react-router'
 import Config from './config.jsx'
 import jQuery from 'jquery'
 import Auth from './auth.jsx'
 
 var Register = React.createClass({
-  mixins: [ Router.Navigation ],
+  mixins: [ Navigation ],
+
+  getInitialState() {
+    return {
+      error: "",
+      success: false
+    }
+  },
 
   render() {
     if (Auth.isLoggedIn()) {
@@ -41,12 +48,30 @@ var Register = React.createClass({
             required
           /> 
 
+          {
+            this.state.error != "" ? (
+              <div className="alert alert-danger text-center" role="alert">
+                { this.state.error }
+              </div>
+            ) : ""
+          }
+
+          {
+            this.state.success != "" ? (
+              <div className="alert alert-success text-center" role="alert">
+                Register Successfully
+              </div>
+            ) : ""
+          }
+
           <button
             onClick={ this.register } 
             className="btn btn-lg btn-primary btn-block" 
             type="submit"
           >Register</button>
         </form>
+
+        <Link to="/login" className="btn btn-link btn-block" type="button">Login</Link>
       </div>
     )
   },
@@ -60,18 +85,39 @@ var Register = React.createClass({
       password: React.findDOMNode(this.refs.password).value
     }
 
+    if (!_data.displayName || !_data.email || !_data.password) {
+
+      this.setState({
+        error: "Missing some fields"
+      })
+
+      return
+    }
+
     jQuery.ajax({
       url: `${Config.apiUrl}/user`,
       method: 'POST',
       data: _data,
       success: (resp) => {
-        Auth.setToken(resp.token)
-        this.transitionTo('/')
-        return location.reload()
+        this.setState({
+          success: true
+        })
+        
+        Auth.setToken(resp.Token)
+        Auth.setDisplayName(resp.DisplayName)
+        Auth.setId(resp.Id)
+
+        setTimeout(()=>{
+          // this.transitionTo('/')
+          location.reload()
+        }.bind(this), 1000)
       },
       error: (jqXHR, textStatus, errorThrown) => {
-        alert(jqXHR.responseJSON.Message)
-      }
+        // alert(jqXHR.responseJSON.Message)
+        this.setState({
+          error: "Email existed"
+        })
+      }.bind(this)
     })
   }
 
