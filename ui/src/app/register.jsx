@@ -67,7 +67,9 @@ var Register = React.createClass({
       method: 'POST',
       data: _data,
       success: (resp) => {
-        Auth.setToken(resp.token)
+        Auth.setToken(resp.Token)
+        Auth.setDisplayName(resp.DisplayName)
+        Auth.setId(resp.Id)
         this.transitionTo('/')
         return location.reload()
       },

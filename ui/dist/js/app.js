@@ -38551,7 +38551,9 @@ var Register = _react2['default'].createClass({
       method: 'POST',
       data: _data,
       success: function success(resp) {
-        _authJsx2['default'].setToken(resp.token);
+        _authJsx2['default'].setToken(resp.Token);
+        _authJsx2['default'].setDisplayName(resp.DisplayName);
+        _authJsx2['default'].setId(resp.Id);
         _this.transitionTo('/');
         return location.reload();
       },
