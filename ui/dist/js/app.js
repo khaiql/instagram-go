@@ -37860,7 +37860,7 @@ Object.defineProperty(exports, '__esModule', {
 var _prefix = 'sss_';
 
 var Config = {
-  apiUrl: 'https://floating-tundra-7355.herokuapp.com',
+  apiUrl: window['apiUrl'] || 'http://sssphotos.net:3000',
   // Local Storage
   ls: {
     // Account
@@ -38131,7 +38131,7 @@ var Navbar = _react2['default'].createClass({
             _react2['default'].createElement(
               'a',
               { className: 'navbar-brand', href: '#/' },
-              _react2['default'].createElement('img', { width: '90', src: '/styles/images/logo.png', alt: '' })
+              _react2['default'].createElement('img', { width: '90', src: 'styles/images/logo.png', alt: '' })
             )
           ),
           this.state.isLoggedIn ? _react2['default'].createElement(
