@@ -1,21 +1,17 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { Navigation, Link } from 'react-router'
 import Auth from './auth.jsx'
 
-class Login extends React.Component {
+var Login = React.createClass({
+  mixins: [ Navigation ],
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
+  getInitialState() {
+    return {
       isLoggedIn: Auth.isLoggedIn(),
       error: "",
       success: "",
     }
-
-    // ES6 not auto bind this
-    this.login = this.login.bind(this)
-  }
+  },
 
   render() {
     if (Auth.isLoggedIn()) {
@@ -74,7 +70,7 @@ class Login extends React.Component {
         <Link to="/register" className="btn btn-link btn-block" type="button">Register now!</Link>
       </div> // .container
     )
-  }
+  },
 
   login(e) {
     e.preventDefault()
@@ -97,7 +93,7 @@ class Login extends React.Component {
         })
       }.bind(this)
     )
-  }
-}
+  },
+})
 
 export default Login

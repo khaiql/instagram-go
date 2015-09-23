@@ -23,12 +23,14 @@ class Auth {
       url: `${Config.apiUrl}/user/login`,
       data: data,
       success: (resp) => {
-        this.setToken(resp.Token)
-        this.setId(resp.Id)
-        this.setDisplayName(resp.DisplayName)
         cb()
-        setTimeout(()=>{location.reload()}, 1000)
-      },
+        setTimeout(()=>{
+          this.setToken(resp.Token)
+          this.setId(resp.Id)
+          this.setDisplayName(resp.DisplayName)
+          location.reload()
+        }.bind(this), 1000)
+      }.bind(this),
       error: ()=> {
         cb_e()
       }
