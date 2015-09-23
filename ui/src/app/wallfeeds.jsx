@@ -2,6 +2,7 @@ import React from 'react'
 import jQuery from 'jquery'
 import Config from './config.jsx'
 import Photos from './photos.jsx'
+import Upload from './upload.jsx'
 
 class WallFeeds extends React.Component {
 
@@ -26,11 +27,23 @@ class WallFeeds extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>WallFeeds</h1>
+      <div className="container">
+      <div className="row">
+      <div className="col-md-6 col-md-push-3">
+        <br />
+        
+        <Upload unshiftPhoto={ this.unshiftPhoto.bind(this) } />
+
         <Photos photos={ this.state.photos } />
       </div>
+      </div>
+      </div>
     )
+  }
+
+  unshiftPhoto(photo) {
+    this.state.photos.unshift(photo)
+    this.forceUpdate()
   }
 
 }

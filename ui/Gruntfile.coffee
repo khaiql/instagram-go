@@ -61,3 +61,11 @@ module.exports = (grunt) ->
       'uglify:vendor'
     ]
   )
+
+  grunt.registerTask(
+    'default', [
+      'compass:clean'
+      'compass:dist'
+      'browserify:app'
+    ]
+  )

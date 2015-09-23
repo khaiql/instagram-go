@@ -29,9 +29,17 @@ class Tag extends React.Component {
     }
 
     return (
-      <div>
-        <h1>Tag #{ this.props.params.tag }</h1>
+      <div className="container">
+      <div className="row">
+      <div className="col-md-6 col-md-push-3">
+        <br />
+
+        <h1 className="text-center text-muted">#{ this.props.params.tag }</h1>
+        <br/>
         <Photos photos={ this.state.photos } />
+        
+      </div>
+      </div>
       </div>
     )
   }
