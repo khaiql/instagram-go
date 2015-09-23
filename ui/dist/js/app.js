@@ -37860,7 +37860,7 @@ Object.defineProperty(exports, '__esModule', {
 var _prefix = 'sss_';
 
 var Config = {
-  apiUrl: 'http://sssphotos.net:3000',
+  apiUrl: window['apiUrl'] || 'http://sssphotos.net:3000',
   // Local Storage
   ls: {
     // Account
