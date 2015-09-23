@@ -1,11 +1,11 @@
 import React from 'react'
-import Router from 'react-router'
+import { Link, Navigation } from 'react-router'
 import Config from './config.jsx'
 import jQuery from 'jquery'
 import Auth from './auth.jsx'
 
 var Register = React.createClass({
-  mixins: [ Router.Navigation ],
+  mixins: [ Navigation ],
 
   render() {
     if (Auth.isLoggedIn()) {
@@ -47,6 +47,8 @@ var Register = React.createClass({
             type="submit"
           >Register</button>
         </form>
+
+        <Link to="/login" className="btn btn-link btn-block" type="button">Login</Link>
       </div>
     )
   },

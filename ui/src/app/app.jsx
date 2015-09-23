@@ -18,7 +18,7 @@ class App extends React.Component {
         </header>
         
         <main>
-          <RouteHandler />
+          <RouteHandler lorem="ipsum" />
         </main>
 
         <footer></footer>

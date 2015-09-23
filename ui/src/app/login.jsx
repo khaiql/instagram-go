@@ -9,7 +9,8 @@ class Login extends React.Component {
 
     this.state = {
       isLoggedIn: Auth.isLoggedIn(),
-      error: ""
+      error: "",
+      success: "",
     }
 
     // ES6 not auto bind this
@@ -19,6 +20,7 @@ class Login extends React.Component {
   render() {
     return(
       <div className="container">
+
         <form className="form-login">
           <input 
             ref="email"
@@ -53,6 +55,14 @@ class Login extends React.Component {
             ) : ""
           }
 
+          {
+            this.state.success != "" ? (
+              <div className="alert alert-success text-center" role="alert">
+                Login Successfully
+              </div>
+            ) : ""
+          }
+
           <button onClick={ this.login } className="btn btn-lg btn-primary btn-block" type="submit">Login</button>
         </form>
 
@@ -72,11 +82,16 @@ class Login extends React.Component {
 
     // TODO validate input
     
-    Auth.login(_data, function(){}, ()=>{
-      this.setState({
-        error: "Login Failed"
-      })
-    }.bind(this))
+    Auth.login(_data, ()=>{
+        this.setState({
+          success: true
+        })
+      }.bind(this), ()=>{
+        this.setState({
+          error: true
+        })
+      }.bind(this)
+    )
   }
 }
 

@@ -37494,6 +37494,10 @@ var _reactRouter = require('react-router');
 
 var _reactRouter2 = _interopRequireDefault(_reactRouter);
 
+var _photosJsx = require('./photos.jsx');
+
+var _photosJsx2 = _interopRequireDefault(_photosJsx);
+
 var Account = _reactAddons2['default'].createClass({
   displayName: 'Account',
 
@@ -37506,7 +37510,8 @@ var Account = _reactAddons2['default'].createClass({
       initialStates: {
         displayName: null,
         email: null
-      }
+      },
+      photos: []
     };
   },
 
@@ -37531,6 +37536,17 @@ var Account = _reactAddons2['default'].createClass({
         console.log('error');
       }
     });
+
+    _jquery2['default'].ajax({
+      url: _configJsx2['default'].apiUrl + '/user/' + _authJsx2['default'].getId() + '/photos',
+      success: function success(resp) {
+        _this.state.photos = _this.state.photos.concat(resp);
+        _this.forceUpdate();
+      },
+      error: function error(resp) {
+        console.log('error');
+      }
+    });
   },
 
   render: function render() {
@@ -37544,56 +37560,75 @@ var Account = _reactAddons2['default'].createClass({
 
     return _reactAddons2['default'].createElement(
       'div',
-      { className: 'container account-page' },
+      { className: 'container' },
       _reactAddons2['default'].createElement(
         'div',
-        { className: 'card' },
+        { className: 'row' },
+        _reactAddons2['default'].createElement('br', null),
+        _reactAddons2['default'].createElement('br', null),
         _reactAddons2['default'].createElement(
           'div',
-          { className: 'card-block' },
+          { className: 'col-sm-4' },
           _reactAddons2['default'].createElement(
             'h4',
-            { className: 'card-title text-center text-muted' },
+            { className: 'text-center text-muted' },
             'Your account'
           ),
-          _reactAddons2['default'].createElement('br', null),
           _reactAddons2['default'].createElement(
-            'form',
-            null,
+            'div',
+            { className: 'card' },
             _reactAddons2['default'].createElement(
-              'fieldset',
-              { className: 'form-group' },
-              _reactAddons2['default'].createElement('input', {
-                className: 'form-control input-lg',
-                type: 'text',
-                ref: 'displayName',
-                valueLink: this.linkState('displayName')
-              })
-            ),
-            _reactAddons2['default'].createElement(
-              'fieldset',
-              { className: 'form-group' },
-              _reactAddons2['default'].createElement('input', {
-                className: 'form-control input-lg',
-                type: 'text',
-                ref: 'email',
-                valueLink: this.linkState('email')
-              })
-            ),
-            _reactAddons2['default'].createElement(
-              'fieldset',
-              { 'class': 'form-group' },
+              'div',
+              { className: 'card-block' },
               _reactAddons2['default'].createElement(
-                'button',
-                {
-                  onClick: this.update,
-                  className: 'btn btn-lg btn-primary btn-block',
-                  type: 'submit'
-                },
-                'Update'
+                'form',
+                null,
+                _reactAddons2['default'].createElement(
+                  'fieldset',
+                  { className: 'form-group' },
+                  _reactAddons2['default'].createElement('input', {
+                    className: 'form-control input-lg',
+                    type: 'text',
+                    ref: 'displayName',
+                    valueLink: this.linkState('displayName')
+                  })
+                ),
+                _reactAddons2['default'].createElement(
+                  'fieldset',
+                  { className: 'form-group' },
+                  _reactAddons2['default'].createElement('input', {
+                    className: 'form-control input-lg',
+                    type: 'text',
+                    ref: 'email',
+                    valueLink: this.linkState('email')
+                  })
+                ),
+                _reactAddons2['default'].createElement(
+                  'fieldset',
+                  { className: 'form-group' },
+                  _reactAddons2['default'].createElement(
+                    'button',
+                    {
+                      onClick: this.update,
+                      className: 'btn btn-lg btn-primary btn-block',
+                      type: 'submit'
+                    },
+                    'Update'
+                  )
+                )
               )
             )
           )
+        ),
+        _reactAddons2['default'].createElement(
+          'div',
+          { className: 'col-sm-8' },
+          _reactAddons2['default'].createElement(
+            'h4',
+            { className: 'card-title text-center text-muted' },
+            'Your Photos'
+          ),
+          _reactAddons2['default'].createElement(_photosJsx2['default'], { photos: this.state.photos })
         )
       )
     );
@@ -37627,7 +37662,7 @@ var Account = _reactAddons2['default'].createClass({
 exports['default'] = Account;
 module.exports = exports['default'];
 
-},{"./auth.jsx":220,"./config.jsx":221,"jquery":2,"react-router":30,"react/addons":45}],219:[function(require,module,exports){
+},{"./auth.jsx":220,"./config.jsx":223,"./photos.jsx":228,"jquery":2,"react-router":30,"react/addons":45}],219:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -37700,7 +37735,7 @@ var App = (function (_React$Component) {
         _react2['default'].createElement(
           'main',
           null,
-          _react2['default'].createElement(RouteHandler, null)
+          _react2['default'].createElement(RouteHandler, { lorem: 'ipsum' })
         ),
         _react2['default'].createElement('footer', null)
       );
@@ -37724,7 +37759,7 @@ _reactRouter2['default'].run(routes, function (Handler) {
   _react2['default'].render(_react2['default'].createElement(Handler, null), document.body);
 });
 
-},{"./account.jsx":218,"./index.jsx":222,"./login.jsx":223,"./navbar.jsx":224,"./register.jsx":226,"./tag.jsx":227,"react":217,"react-router":30}],220:[function(require,module,exports){
+},{"./account.jsx":218,"./index.jsx":224,"./login.jsx":225,"./navbar.jsx":227,"./register.jsx":229,"./tag.jsx":230,"react":217,"react-router":30}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -37760,8 +37795,6 @@ var Auth = (function () {
     value: function login(data, cb, cb_e) {
       var _this = this;
 
-      cb = arguments[arguments.length - 1];
-
       var _isLoggedIn = this.isLoggedIn();
 
       // Logged in
@@ -37778,8 +37811,10 @@ var Auth = (function () {
           _this.setToken(resp.Token);
           _this.setId(resp.Id);
           _this.setDisplayName(resp.DisplayName);
-          alert('Login successfully');
-          location.reload();
+          cb();
+          setTimeout(function () {
+            location.reload();
+          }, 1000);
         },
         error: function error() {
           cb_e();
@@ -37851,7 +37886,729 @@ var Auth = (function () {
 exports['default'] = new Auth();
 module.exports = exports['default'];
 
-},{"./config.jsx":221,"jquery":2}],221:[function(require,module,exports){
+},{"./config.jsx":223,"jquery":2}],221:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _utilJsx = require('./util.jsx');
+
+var _utilJsx2 = _interopRequireDefault(_utilJsx);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v4.0.0): modal.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+var Modal = (function ($) {
+
+  /**
+   * ------------------------------------------------------------------------
+   * Constants
+   * ------------------------------------------------------------------------
+   */
+
+  var NAME = 'modal';
+  var VERSION = '4.0.0';
+  var DATA_KEY = 'bs.modal';
+  var EVENT_KEY = '.' + DATA_KEY;
+  var DATA_API_KEY = '.data-api';
+  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var TRANSITION_DURATION = 300;
+  var BACKDROP_TRANSITION_DURATION = 150;
+
+  var Default = {
+    backdrop: true,
+    keyboard: true,
+    focus: true,
+    show: true
+  };
+
+  var DefaultType = {
+    backdrop: '(boolean|string)',
+    keyboard: 'boolean',
+    focus: 'boolean',
+    show: 'boolean'
+  };
+
+  var Event = {
+    HIDE: 'hide' + EVENT_KEY,
+    HIDDEN: 'hidden' + EVENT_KEY,
+    SHOW: 'show' + EVENT_KEY,
+    SHOWN: 'shown' + EVENT_KEY,
+    FOCUSIN: 'focusin' + EVENT_KEY,
+    RESIZE: 'resize' + EVENT_KEY,
+    CLICK_DISMISS: 'click.dismiss' + EVENT_KEY,
+    KEYDOWN_DISMISS: 'keydown.dismiss' + EVENT_KEY,
+    MOUSEUP_DISMISS: 'mouseup.dismiss' + EVENT_KEY,
+    MOUSEDOWN_DISMISS: 'mousedown.dismiss' + EVENT_KEY,
+    CLICK_DATA_API: 'click' + EVENT_KEY + DATA_API_KEY
+  };
+
+  var ClassName = {
+    SCROLLBAR_MEASURER: 'modal-scrollbar-measure',
+    BACKDROP: 'modal-backdrop',
+    OPEN: 'modal-open',
+    FADE: 'fade',
+    IN: 'in'
+  };
+
+  var Selector = {
+    DIALOG: '.modal-dialog',
+    DATA_TOGGLE: '[data-toggle="modal"]',
+    DATA_DISMISS: '[data-dismiss="modal"]',
+    FIXED_CONTENT: '.navbar-fixed-top, .navbar-fixed-bottom, .is-fixed'
+  };
+
+  /**
+   * ------------------------------------------------------------------------
+   * Class Definition
+   * ------------------------------------------------------------------------
+   */
+
+  var Modal = (function () {
+    function Modal(element, config) {
+      _classCallCheck(this, Modal);
+
+      this._config = this._getConfig(config);
+      this._element = element;
+      this._dialog = $(element).find(Selector.DIALOG)[0];
+      this._backdrop = null;
+      this._isShown = false;
+      this._isBodyOverflowing = false;
+      this._ignoreBackdropClick = false;
+      this._originalBodyPadding = 0;
+      this._scrollbarWidth = 0;
+    }
+
+    /**
+     * ------------------------------------------------------------------------
+     * Data Api implementation
+     * ------------------------------------------------------------------------
+     */
+
+    // getters
+
+    _createClass(Modal, [{
+      key: 'toggle',
+
+      // public
+
+      value: function toggle(relatedTarget) {
+        return this._isShown ? this.hide() : this.show(relatedTarget);
+      }
+    }, {
+      key: 'show',
+      value: function show(relatedTarget) {
+        var _this = this;
+
+        var showEvent = $.Event(Event.SHOW, {
+          relatedTarget: relatedTarget
+        });
+
+        $(this._element).trigger(showEvent);
+
+        if (this._isShown || showEvent.isDefaultPrevented()) {
+          return;
+        }
+
+        this._isShown = true;
+
+        this._checkScrollbar();
+        this._setScrollbar();
+
+        $(document.body).addClass(ClassName.OPEN);
+
+        this._setEscapeEvent();
+        this._setResizeEvent();
+
+        $(this._element).on(Event.CLICK_DISMISS, Selector.DATA_DISMISS, $.proxy(this.hide, this));
+
+        $(this._dialog).on(Event.MOUSEDOWN_DISMISS, function () {
+          $(_this._element).one(Event.MOUSEUP_DISMISS, function (event) {
+            if ($(event.target).is(_this._element)) {
+              that._ignoreBackdropClick = true;
+            }
+          });
+        });
+
+        this._showBackdrop($.proxy(this._showElement, this, relatedTarget));
+      }
+    }, {
+      key: 'hide',
+      value: function hide(event) {
+        if (event) {
+          event.preventDefault();
+        }
+
+        var hideEvent = $.Event(Event.HIDE);
+
+        $(this._element).trigger(hideEvent);
+
+        if (!this._isShown || hideEvent.isDefaultPrevented()) {
+          return;
+        }
+
+        this._isShown = false;
+
+        this._setEscapeEvent();
+        this._setResizeEvent();
+
+        $(document).off(Event.FOCUSIN);
+
+        $(this._element).removeClass(ClassName.IN);
+
+        $(this._element).off(Event.CLICK_DISMISS);
+        $(this._dialog).off(Event.MOUSEDOWN_DISMISS);
+
+        if (_utilJsx2['default'].supportsTransitionEnd() && $(this._element).hasClass(ClassName.FADE)) {
+
+          $(this._element).one(_utilJsx2['default'].TRANSITION_END, $.proxy(this._hideModal, this)).emulateTransitionEnd(TRANSITION_DURATION);
+        } else {
+          this._hideModal();
+        }
+      }
+    }, {
+      key: 'dispose',
+      value: function dispose() {
+        $.removeData(this._element, DATA_KEY);
+
+        $(window).off(EVENT_KEY);
+        $(document).off(EVENT_KEY);
+        $(this._element).off(EVENT_KEY);
+        $(this._backdrop).off(EVENT_KEY);
+
+        this._config = null;
+        this._element = null;
+        this._dialog = null;
+        this._backdrop = null;
+        this._isShown = null;
+        this._isBodyOverflowing = null;
+        this._ignoreBackdropClick = null;
+        this._originalBodyPadding = null;
+        this._scrollbarWidth = null;
+      }
+
+      // private
+
+    }, {
+      key: '_getConfig',
+      value: function _getConfig(config) {
+        config = $.extend({}, Default, config);
+        _utilJsx2['default'].typeCheckConfig(NAME, config, DefaultType);
+        return config;
+      }
+    }, {
+      key: '_showElement',
+      value: function _showElement(relatedTarget) {
+        var _this2 = this;
+
+        var transition = _utilJsx2['default'].supportsTransitionEnd() && $(this._element).hasClass(ClassName.FADE);
+
+        if (!this._element.parentNode || this._element.parentNode.nodeType !== Node.ELEMENT_NODE) {
+          // don't move modals dom position
+          document.body.appendChild(this._element);
+        }
+
+        this._element.style.display = 'block';
+        this._element.scrollTop = 0;
+
+        if (transition) {
+          _utilJsx2['default'].reflow(this._element);
+        }
+
+        $(this._element).addClass(ClassName.IN);
+
+        if (this._config.focus) {
+          this._enforceFocus();
+        }
+
+        var shownEvent = $.Event(Event.SHOWN, {
+          relatedTarget: relatedTarget
+        });
+
+        var transitionComplete = function transitionComplete() {
+          if (_this2._config.focus) {
+            _this2._element.focus();
+          }
+          $(_this2._element).trigger(shownEvent);
+        };
+
+        if (transition) {
+          $(this._dialog).one(_utilJsx2['default'].TRANSITION_END, transitionComplete).emulateTransitionEnd(TRANSITION_DURATION);
+        } else {
+          transitionComplete();
+        }
+      }
+    }, {
+      key: '_enforceFocus',
+      value: function _enforceFocus() {
+        var _this3 = this;
+
+        $(document).off(Event.FOCUSIN) // guard against infinite focus loop
+        .on(Event.FOCUSIN, function (event) {
+          if (_this3._element !== event.target && !$(_this3._element).has(event.target).length) {
+            _this3._element.focus();
+          }
+        });
+      }
+    }, {
+      key: '_setEscapeEvent',
+      value: function _setEscapeEvent() {
+        var _this4 = this;
+
+        if (this._isShown && this._config.keyboard) {
+          $(this._element).on(Event.KEYDOWN_DISMISS, function (event) {
+            if (event.which === 27) {
+              _this4.hide();
+            }
+          });
+        } else if (!this._isShown) {
+          $(this._element).off(Event.KEYDOWN_DISMISS);
+        }
+      }
+    }, {
+      key: '_setResizeEvent',
+      value: function _setResizeEvent() {
+        if (this._isShown) {
+          $(window).on(Event.RESIZE, $.proxy(this._handleUpdate, this));
+        } else {
+          $(window).off(Event.RESIZE);
+        }
+      }
+    }, {
+      key: '_hideModal',
+      value: function _hideModal() {
+        var _this5 = this;
+
+        this._element.style.display = 'none';
+        this._showBackdrop(function () {
+          $(document.body).removeClass(ClassName.OPEN);
+          _this5._resetAdjustments();
+          _this5._resetScrollbar();
+          $(_this5._element).trigger(Event.HIDDEN);
+        });
+      }
+    }, {
+      key: '_removeBackdrop',
+      value: function _removeBackdrop() {
+        if (this._backdrop) {
+          $(this._backdrop).remove();
+          this._backdrop = null;
+        }
+      }
+    }, {
+      key: '_showBackdrop',
+      value: function _showBackdrop(callback) {
+        var _this6 = this;
+
+        var animate = $(this._element).hasClass(ClassName.FADE) ? ClassName.FADE : '';
+
+        if (this._isShown && this._config.backdrop) {
+          var doAnimate = _utilJsx2['default'].supportsTransitionEnd() && animate;
+
+          this._backdrop = document.createElement('div');
+          this._backdrop.className = ClassName.BACKDROP;
+
+          if (animate) {
+            $(this._backdrop).addClass(animate);
+          }
+
+          $(this._backdrop).appendTo(document.body);
+
+          $(this._element).on(Event.CLICK_DISMISS, function (event) {
+            if (_this6._ignoreBackdropClick) {
+              _this6._ignoreBackdropClick = false;
+              return;
+            }
+            if (event.target !== event.currentTarget) {
+              return;
+            }
+            if (_this6._config.backdrop === 'static') {
+              _this6._element.focus();
+            } else {
+              _this6.hide();
+            }
+          });
+
+          if (doAnimate) {
+            _utilJsx2['default'].reflow(this._backdrop);
+          }
+
+          $(this._backdrop).addClass(ClassName.IN);
+
+          if (!callback) {
+            return;
+          }
+
+          if (!doAnimate) {
+            callback();
+            return;
+          }
+
+          $(this._backdrop).one(_utilJsx2['default'].TRANSITION_END, callback).emulateTransitionEnd(BACKDROP_TRANSITION_DURATION);
+        } else if (!this._isShown && this._backdrop) {
+          $(this._backdrop).removeClass(ClassName.IN);
+
+          var callbackRemove = function callbackRemove() {
+            _this6._removeBackdrop();
+            if (callback) {
+              callback();
+            }
+          };
+
+          if (_utilJsx2['default'].supportsTransitionEnd() && $(this._element).hasClass(ClassName.FADE)) {
+            $(this._backdrop).one(_utilJsx2['default'].TRANSITION_END, callbackRemove).emulateTransitionEnd(BACKDROP_TRANSITION_DURATION);
+          } else {
+            callbackRemove();
+          }
+        } else if (callback) {
+          callback();
+        }
+      }
+
+      // ----------------------------------------------------------------------
+      // the following methods are used to handle overflowing modals
+      // todo (fat): these should probably be refactored out of modal.js
+      // ----------------------------------------------------------------------
+
+    }, {
+      key: '_handleUpdate',
+      value: function _handleUpdate() {
+        this._adjustDialog();
+      }
+    }, {
+      key: '_adjustDialog',
+      value: function _adjustDialog() {
+        var isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight;
+
+        if (!this._isBodyOverflowing && isModalOverflowing) {
+          this._element.style.paddingLeft = this._scrollbarWidth + 'px';
+        }
+
+        if (this._isBodyOverflowing && !isModalOverflowing) {
+          this._element.style.paddingRight = this._scrollbarWidth + 'px~';
+        }
+      }
+    }, {
+      key: '_resetAdjustments',
+      value: function _resetAdjustments() {
+        this._element.style.paddingLeft = '';
+        this._element.style.paddingRight = '';
+      }
+    }, {
+      key: '_checkScrollbar',
+      value: function _checkScrollbar() {
+        var fullWindowWidth = window.innerWidth;
+        if (!fullWindowWidth) {
+          // workaround for missing window.innerWidth in IE8
+          var documentElementRect = document.documentElement.getBoundingClientRect();
+          fullWindowWidth = documentElementRect.right - Math.abs(documentElementRect.left);
+        }
+        this._isBodyOverflowing = document.body.clientWidth < fullWindowWidth;
+        this._scrollbarWidth = this._getScrollbarWidth();
+      }
+    }, {
+      key: '_setScrollbar',
+      value: function _setScrollbar() {
+        var bodyPadding = parseInt($(Selector.FIXED_CONTENT).css('padding-right') || 0, 10);
+
+        this._originalBodyPadding = document.body.style.paddingRight || '';
+
+        if (this._isBodyOverflowing) {
+          document.body.style.paddingRight = bodyPadding + (this._scrollbarWidth + 'px');
+        }
+      }
+    }, {
+      key: '_resetScrollbar',
+      value: function _resetScrollbar() {
+        document.body.style.paddingRight = this._originalBodyPadding;
+      }
+    }, {
+      key: '_getScrollbarWidth',
+      value: function _getScrollbarWidth() {
+        // thx d.walsh
+        var scrollDiv = document.createElement('div');
+        scrollDiv.className = ClassName.SCROLLBAR_MEASURER;
+        document.body.appendChild(scrollDiv);
+        var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+        document.body.removeChild(scrollDiv);
+        return scrollbarWidth;
+      }
+
+      // static
+
+    }], [{
+      key: '_jQueryInterface',
+      value: function _jQueryInterface(config, relatedTarget) {
+        return this.each(function () {
+          var data = $(this).data(DATA_KEY);
+          var _config = $.extend({}, Modal.Default, $(this).data(), typeof config === 'object' && config);
+
+          if (!data) {
+            data = new Modal(this, _config);
+            $(this).data(DATA_KEY, data);
+          }
+
+          if (typeof config === 'string') {
+            data[config](relatedTarget);
+          } else if (_config.show) {
+            data.show(relatedTarget);
+          }
+        });
+      }
+    }, {
+      key: 'VERSION',
+      get: function get() {
+        return VERSION;
+      }
+    }, {
+      key: 'Default',
+      get: function get() {
+        return Default;
+      }
+    }]);
+
+    return Modal;
+  })();
+
+  $(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
+    var _this7 = this;
+
+    var target = undefined;
+    var selector = _utilJsx2['default'].getSelectorFromElement(this);
+
+    if (selector) {
+      target = $(selector)[0];
+    }
+
+    var config = $(target).data(DATA_KEY) ? 'toggle' : $.extend({}, $(target).data(), $(this).data());
+
+    if (this.tagName === 'A') {
+      event.preventDefault();
+    }
+
+    var $target = $(target).one(Event.SHOW, function (showEvent) {
+      if (showEvent.isDefaultPrevented()) {
+        // only register focus restorer if modal will actually get shown
+        return;
+      }
+
+      $target.one(Event.HIDDEN, function () {
+        if ($(_this7).is(':visible')) {
+          _this7.focus();
+        }
+      });
+    });
+
+    Modal._jQueryInterface.call($(target), config, this);
+  });
+
+  /**
+   * ------------------------------------------------------------------------
+   * jQuery
+   * ------------------------------------------------------------------------
+   */
+
+  $.fn[NAME] = Modal._jQueryInterface;
+  $.fn[NAME].Constructor = Modal;
+  $.fn[NAME].noConflict = function () {
+    $.fn[NAME] = JQUERY_NO_CONFLICT;
+    return Modal._jQueryInterface;
+  };
+
+  return Modal;
+})(_jquery2['default']);
+
+exports['default'] = Modal;
+module.exports = exports['default'];
+
+},{"./util.jsx":222,"jquery":2}],222:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v4.0.0): util.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+var Util = (function ($) {
+
+  /**
+   * ------------------------------------------------------------------------
+   * Private TransitionEnd Helpers
+   * ------------------------------------------------------------------------
+   */
+
+  var transition = false;
+
+  var TransitionEndEvent = {
+    WebkitTransition: 'webkitTransitionEnd',
+    MozTransition: 'transitionend',
+    OTransition: 'oTransitionEnd otransitionend',
+    transition: 'transitionend'
+  };
+
+  // shoutout AngusCroll (https://goo.gl/pxwQGp)
+  function toType(obj) {
+    return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+  }
+
+  function isElement(obj) {
+    return (obj[0] || obj).nodeType;
+  }
+
+  function getSpecialTransitionEndEvent() {
+    return {
+      bindType: transition.end,
+      delegateType: transition.end,
+      handle: function handle(event) {
+        if ($(event.target).is(this)) {
+          return event.handleObj.handler.apply(this, arguments);
+        }
+      }
+    };
+  }
+
+  function transitionEndTest() {
+    if (window.QUnit) {
+      return false;
+    }
+
+    var el = document.createElement('bootstrap');
+
+    for (var _name in TransitionEndEvent) {
+      if (el.style[_name] !== undefined) {
+        return { end: TransitionEndEvent[_name] };
+      }
+    }
+
+    return false;
+  }
+
+  function transitionEndEmulator(duration) {
+    var _this = this;
+
+    var called = false;
+
+    $(this).one(Util.TRANSITION_END, function () {
+      called = true;
+    });
+
+    setTimeout(function () {
+      if (!called) {
+        Util.triggerTransitionEnd(_this);
+      }
+    }, duration);
+
+    return this;
+  }
+
+  function setTransitionEndSupport() {
+    transition = transitionEndTest();
+
+    $.fn.emulateTransitionEnd = transitionEndEmulator;
+
+    if (Util.supportsTransitionEnd()) {
+      $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
+    }
+  }
+
+  /**
+   * --------------------------------------------------------------------------
+   * Public Util Api
+   * --------------------------------------------------------------------------
+   */
+
+  var Util = {
+
+    TRANSITION_END: 'bsTransitionEnd',
+
+    getUID: function getUID(prefix) {
+      do {
+        prefix += ~ ~(Math.random() * 1000000);
+      } while (document.getElementById(prefix));
+      return prefix;
+    },
+
+    getSelectorFromElement: function getSelectorFromElement(element) {
+      var selector = element.getAttribute('data-target');
+
+      if (!selector) {
+        selector = element.getAttribute('href') || '';
+        selector = /^#[a-z]/i.test(selector) ? selector : null;
+      }
+
+      return selector;
+    },
+
+    reflow: function reflow(element) {
+      new Function('bs', 'return bs')(element.offsetHeight);
+    },
+
+    triggerTransitionEnd: function triggerTransitionEnd(element) {
+      $(element).trigger(transition.end);
+    },
+
+    supportsTransitionEnd: function supportsTransitionEnd() {
+      return Boolean(transition);
+    },
+
+    typeCheckConfig: function typeCheckConfig(componentName, config, configTypes) {
+      for (var property in configTypes) {
+        if (configTypes.hasOwnProperty(property)) {
+          var expectedTypes = configTypes[property];
+          var value = config[property];
+          var valueType = undefined;
+
+          if (value && isElement(value)) {
+            valueType = 'element';
+          } else {
+            valueType = toType(value);
+          }
+
+          if (!new RegExp(expectedTypes).test(valueType)) {
+            throw new Error(componentName.toUpperCase() + ': ' + ('Option "' + property + '" provided type "' + valueType + '" ') + ('but expected type "' + expectedTypes + '".'));
+          }
+        }
+      }
+    }
+  };
+
+  setTransitionEndSupport();
+
+  return Util;
+})(_jquery2['default']);
+
+exports['default'] = Util;
+module.exports = exports['default'];
+
+},{"jquery":2}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -37860,7 +38617,7 @@ Object.defineProperty(exports, '__esModule', {
 var _prefix = 'sss_';
 
 var Config = {
-  apiUrl: window['apiUrl'] || 'http://sssphotos.net:3000',
+  apiUrl: window['apiUrl'] || 'http://localhost:3000',
   // Local Storage
   ls: {
     // Account
@@ -37875,7 +38632,7 @@ var Config = {
 exports['default'] = Config;
 module.exports = exports['default'];
 
-},{}],222:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -37940,7 +38697,7 @@ var Index = (function (_React$Component) {
 exports['default'] = Index;
 module.exports = exports['default'];
 
-},{"./auth.jsx":220,"./login.jsx":223,"./wallfeeds.jsx":229,"react":217}],223:[function(require,module,exports){
+},{"./auth.jsx":220,"./login.jsx":225,"./wallfeeds.jsx":232,"react":217}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -37967,6 +38724,10 @@ var _authJsx = require('./auth.jsx');
 
 var _authJsx2 = _interopRequireDefault(_authJsx);
 
+var _modalEleJsx = require('./modal-ele.jsx');
+
+var _modalEleJsx2 = _interopRequireDefault(_modalEleJsx);
+
 var Login = (function (_React$Component) {
   _inherits(Login, _React$Component);
 
@@ -37977,7 +38738,8 @@ var Login = (function (_React$Component) {
 
     this.state = {
       isLoggedIn: _authJsx2['default'].isLoggedIn(),
-      error: ""
+      error: "",
+      success: ""
     };
 
     // ES6 not auto bind this
@@ -38027,6 +38789,11 @@ var Login = (function (_React$Component) {
             { className: 'alert alert-danger text-center', role: 'alert' },
             'Login Failed'
           ) : "",
+          this.state.success != "" ? _react2['default'].createElement(
+            'div',
+            { className: 'alert alert-success text-center', role: 'alert' },
+            'Login Successfully'
+          ) : "",
           _react2['default'].createElement(
             'button',
             { onClick: this.login, className: 'btn btn-lg btn-primary btn-block', type: 'submit' },
@@ -38056,9 +38823,13 @@ var Login = (function (_React$Component) {
       // remember: React.findDOMNode(this.refs.remember).checked
       // TODO validate input
 
-      _authJsx2['default'].login(_data, function () {}, (function () {
+      _authJsx2['default'].login(_data, (function () {
         _this.setState({
-          error: "Login Failed"
+          success: true
+        });
+      }).bind(this), (function () {
+        _this.setState({
+          error: true
         });
       }).bind(this));
     }
@@ -38070,7 +38841,102 @@ var Login = (function (_React$Component) {
 exports['default'] = Login;
 module.exports = exports['default'];
 
-},{"./auth.jsx":220,"react":217,"react-router":30}],224:[function(require,module,exports){
+},{"./auth.jsx":220,"./modal-ele.jsx":226,"react":217,"react-router":30}],226:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _bootstrapModalJsx = require('./bootstrap/modal.jsx');
+
+var _bootstrapModalJsx2 = _interopRequireDefault(_bootstrapModalJsx);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var ModalEle = (function (_React$Component) {
+  _inherits(ModalEle, _React$Component);
+
+  function ModalEle(props) {
+    _classCallCheck(this, ModalEle);
+
+    _get(Object.getPrototypeOf(ModalEle.prototype), 'constructor', this).call(this, props);
+  }
+
+  _createClass(ModalEle, [{
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'div',
+        { className: 'modal fade', id: 'myModal', 'aria-hidden': 'true' },
+        _react2['default'].createElement(
+          'div',
+          { className: 'modal-dialog' },
+          _react2['default'].createElement(
+            'div',
+            { className: 'modal-content' },
+            this.props.title ? _react2['default'].createElement(
+              'div',
+              { className: 'modal-header' },
+              _react2['default'].createElement(
+                'button',
+                { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+                _react2['default'].createElement(
+                  'span',
+                  { 'aria-hidden': 'true' },
+                  '×'
+                ),
+                _react2['default'].createElement(
+                  'span',
+                  { className: 'sr-only' },
+                  'Close'
+                )
+              ),
+              _react2['default'].createElement(
+                'h4',
+                { className: 'modal-title', id: 'myModalLabel' },
+                this.props.title
+              )
+            ) : '',
+            _react2['default'].createElement(
+              'div',
+              { className: 'modal-body' },
+              this.props.content
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'show',
+    value: function show() {
+      (0, _jquery2['default'])("#myModal").modal("show");
+    }
+  }]);
+
+  return ModalEle;
+})(_react2['default'].Component);
+
+exports['default'] = ModalEle;
+module.exports = exports['default'];
+
+},{"./bootstrap/modal.jsx":221,"jquery":2,"react":217}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -38180,7 +39046,7 @@ var Navbar = _react2['default'].createClass({
 exports['default'] = Navbar;
 module.exports = exports['default'];
 
-},{"./auth.jsx":220,"jquery":2,"react":217,"react-router":30}],225:[function(require,module,exports){
+},{"./auth.jsx":220,"jquery":2,"react":217,"react-router":30}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -38401,7 +39267,7 @@ var Photos = (function (_React$Component4) {
 exports['default'] = Photos;
 module.exports = exports['default'];
 
-},{"./auth.jsx":220,"./config.jsx":221,"jquery":2,"moment":3,"react":217,"react-router":30}],226:[function(require,module,exports){
+},{"./auth.jsx":220,"./config.jsx":223,"jquery":2,"moment":3,"react":217,"react-router":30}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -38415,8 +39281,6 @@ var _react = require('react');
 var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
-
-var _reactRouter2 = _interopRequireDefault(_reactRouter);
 
 var _configJsx = require('./config.jsx');
 
@@ -38433,7 +39297,7 @@ var _authJsx2 = _interopRequireDefault(_authJsx);
 var Register = _react2['default'].createClass({
   displayName: 'Register',
 
-  mixins: [_reactRouter2['default'].Navigation],
+  mixins: [_reactRouter.Navigation],
 
   render: function render() {
     if (_authJsx2['default'].isLoggedIn()) {
@@ -38478,6 +39342,11 @@ var Register = _react2['default'].createClass({
           },
           'Register'
         )
+      ),
+      _react2['default'].createElement(
+        _reactRouter.Link,
+        { to: '/login', className: 'btn btn-link btn-block', type: 'button' },
+        'Login'
       )
     );
   },
@@ -38513,7 +39382,7 @@ var Register = _react2['default'].createClass({
 exports['default'] = Register;
 module.exports = exports['default'];
 
-},{"./auth.jsx":220,"./config.jsx":221,"jquery":2,"react":217,"react-router":30}],227:[function(require,module,exports){
+},{"./auth.jsx":220,"./config.jsx":223,"jquery":2,"react":217,"react-router":30}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -38612,7 +39481,7 @@ var Tag = (function (_React$Component) {
 exports['default'] = Tag;
 module.exports = exports['default'];
 
-},{"./config.jsx":221,"./photos.jsx":225,"jquery":2,"react":217,"react-router":30}],228:[function(require,module,exports){
+},{"./config.jsx":223,"./photos.jsx":228,"jquery":2,"react":217,"react-router":30}],231:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -38726,7 +39595,7 @@ var Upload = (function (_React$Component) {
 exports['default'] = Upload;
 module.exports = exports['default'];
 
-},{"./auth.jsx":220,"./config.jsx":221,"jquery":2,"react":217,"react-dropzone":4}],229:[function(require,module,exports){
+},{"./auth.jsx":220,"./config.jsx":223,"jquery":2,"react":217,"react-dropzone":4}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -38822,4 +39691,4 @@ var WallFeeds = (function (_React$Component) {
 exports['default'] = WallFeeds;
 module.exports = exports['default'];
 
-},{"./config.jsx":221,"./photos.jsx":225,"./upload.jsx":228,"jquery":2,"react":217}]},{},[219]);
+},{"./config.jsx":223,"./photos.jsx":228,"./upload.jsx":231,"jquery":2,"react":217}]},{},[219]);
