@@ -38483,6 +38483,13 @@ var Register = _react2['default'].createClass({
 
   mixins: [_reactRouter.Navigation],
 
+  getInitialState: function getInitialState() {
+    return {
+      error: "",
+      success: false
+    };
+  },
+
   render: function render() {
     if (_authJsx2['default'].isLoggedIn()) {
       this.transitionTo('/');
@@ -38517,6 +38524,16 @@ var Register = _react2['default'].createClass({
           placeholder: 'Password',
           required: true
         }),
+        this.state.error != "" ? _react2['default'].createElement(
+          'div',
+          { className: 'alert alert-danger text-center', role: 'alert' },
+          this.state.error
+        ) : "",
+        this.state.success != "" ? _react2['default'].createElement(
+          'div',
+          { className: 'alert alert-success text-center', role: 'alert' },
+          'Register Successfully'
+        ) : "",
         _react2['default'].createElement(
           'button',
           {
@@ -38546,20 +38563,39 @@ var Register = _react2['default'].createClass({
       password: _react2['default'].findDOMNode(this.refs.password).value
     };
 
+    if (!_data.displayName || !_data.email || !_data.password) {
+
+      this.setState({
+        error: "Missing some fields"
+      });
+
+      return;
+    }
+
     _jquery2['default'].ajax({
       url: _configJsx2['default'].apiUrl + '/user',
       method: 'POST',
       data: _data,
       success: function success(resp) {
+        _this.setState({
+          success: true
+        });
+
         _authJsx2['default'].setToken(resp.Token);
         _authJsx2['default'].setDisplayName(resp.DisplayName);
         _authJsx2['default'].setId(resp.Id);
-        _this.transitionTo('/');
-        return location.reload();
+
+        setTimeout((function () {
+          // this.transitionTo('/')
+          location.reload();
+        }).bind(_this), 1000);
       },
-      error: function error(jqXHR, textStatus, errorThrown) {
-        alert(jqXHR.responseJSON.Message);
-      }
+      error: (function (jqXHR, textStatus, errorThrown) {
+        // alert(jqXHR.responseJSON.Message)
+        _this.setState({
+          error: "Email existed"
+        });
+      }).bind(this)
     });
   }
 
