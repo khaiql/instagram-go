@@ -100,6 +100,7 @@ var Register = React.createClass({
       data: _data,
       success: (resp) => {
         this.setState({
+          error: "",
           success: true
         })
         

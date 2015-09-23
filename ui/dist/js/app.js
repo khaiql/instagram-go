@@ -38088,11 +38088,13 @@ var Login = _react2['default'].createClass({
 
     _authJsx2['default'].login(_data, (function () {
       _this.setState({
-        success: true
+        success: true,
+        error: ""
       });
     }).bind(this), (function () {
       _this.setState({
-        error: true
+        error: true,
+        success: ""
       });
     }).bind(this));
   }
@@ -38559,6 +38561,7 @@ var Register = _react2['default'].createClass({
       data: _data,
       success: function success(resp) {
         _this.setState({
+          error: "",
           success: true
         });
 

@@ -85,11 +85,13 @@ var Login = React.createClass({
     
     Auth.login(_data, ()=>{
         this.setState({
-          success: true
+          success: true,
+          error: ""
         })
       }.bind(this), ()=>{
         this.setState({
-          error: true
+          error: true,
+          success: ""
         })
       }.bind(this)
     )
