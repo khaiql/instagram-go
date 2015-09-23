@@ -29,7 +29,7 @@ var Navbar = React.createClass({
       <div className="row">
       <nav className="navbar clearfix navbar-light bg-faded">
         <div className="col-sm-3">
-          <a className="navbar-brand" href="#/"><img width="90" src="/styles/images/logo.png" alt=""/></a>
+          <a className="navbar-brand" href="#/"><img width="90" src="styles/images/logo.png" alt=""/></a>
         </div>
 
         { 
