@@ -3,6 +3,7 @@ import Auth from './auth.jsx'
 import jQuery from 'jquery'
 import Config from './config.jsx'
 import Router from 'react-router'
+import Photos from './photos.jsx'
 
 var Account = React.createClass({
   mixins: [ Router.Navigation, React.addons.LinkedStateMixin ],
@@ -15,6 +16,7 @@ var Account = React.createClass({
         displayName: null,
         email: null,
       },
+      photos: [],
     }
   },
 
@@ -37,6 +39,18 @@ var Account = React.createClass({
         console.log('error');
       }
     })
+
+    jQuery.ajax({
+      url: `${Config.apiUrl}/user/${ Auth.getId() }/photos`,
+      success: (resp) => {
+        this.state.photos =
+          this.state.photos.concat(resp)
+        this.forceUpdate()
+      },
+      error: (resp) => {
+        console.log('error');
+      }
+    })
   },
 
   render() {
@@ -49,12 +63,13 @@ var Account = React.createClass({
     let _email = this.state.email
 
     return (
-      <div className="container account-page">
+      <div className="container">
+      <div className="row">
+      <br /><br />
+      <div className="col-sm-4">
+        <h4 className="text-center text-muted">Your account</h4>
       <div className="card">
       <div className="card-block">
-        <h4 className="card-title text-center text-muted">Your account</h4>
-        <br />
-
         <form>
         <fieldset className="form-group">
           <input 
@@ -74,7 +89,7 @@ var Account = React.createClass({
           />
         </fieldset>
 
-        <fieldset class="form-group">
+        <fieldset className="form-group">
           <button
             onClick={ this.update } 
             className="btn btn-lg btn-primary btn-block" 
@@ -83,6 +98,14 @@ var Account = React.createClass({
         </fieldset>
         </form>
       </div>
+      </div>
+      </div>
+
+      <div className="col-sm-8">
+        <h4 className="card-title text-center text-muted">Your Photos</h4>
+        <Photos photos={ this.state.photos } />
+      </div>
+
       </div>
       </div>
     )
